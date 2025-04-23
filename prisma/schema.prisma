@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model answer {
+  id              Int      @id @default(autoincrement())
+  questionId      Int
+  nama            String
+  email           String
+  nim             String
+  answer_text     String
+  preProcess_text String?
+  sentiment       String?
+  created_at      DateTime @default(now())
+  question        question @relation(fields: [questionId], references: [id], map: "Answer_questionId_fkey")
+
+  @@index([questionId], map: "Answer_questionId_fkey")
+}
+
+model question {
+  id            Int      @id @default(autoincrement())
+  question_text String
+  question_type String   @default("radio")
+  created_at    DateTime @default(now())
+  answer        answer[]
+}
