@@ -18,6 +18,7 @@ export const submitForm = async (req, res) => {
   try {
     res.status(201).json({
       success: true,
+      insertedAnswers,
       message: "Submit Success",
     });
   } catch (error) {
