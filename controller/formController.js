@@ -14,11 +14,11 @@ export const getAllQuestion = async (req, res) => {
 };
 
 export const submitForm = async (req, res) => {
-  await formModel.submitForm(req.body);
+  const insertedAnswers = await formModel.submitForm(req.body);
   try {
     res.status(201).json({
       success: true,
-      insertedAnswers,
+      sentiment: insertedAnswers,
       message: "Submit Success",
     });
   } catch (error) {

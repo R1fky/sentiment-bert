@@ -18,16 +18,76 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="">
-          
-        </form>
+        <form id="formAddQuestion">
+          <div class="mb-3">
+            <label for="question_text" class="form-label">Isi Pertanyaan</label>
+            <textarea class="form-control" id="question_text" name="question_text" required placeholder="Masukkan teks pertanyaan"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="question_type" class="form-label">Tipe Pertanyaan</label>
+            <select class="form-select" id="question_type" name="question_type">
+              <option value="radio" selected>Radio (Sangat Puas / Puas / Tidak Puas)</option>
+              <!-- Kalau mau dikembangkan, bisa tambah option lain -->
+            </select>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
       </div>
+    </form>
     </div>
   </div>
 </div>
-
 <!-- end Modal  -->
+
+<script>
+  document.getElementById('formAddQuestion').addEventListener('submit', async function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+      const formQuestionData =  {
+        question_text: document.getElementById('question_text').value,
+        question_type: document.getElementById('question_type').value
+      }
+
+      try {
+        const response = await fetch('/question/addQuestion', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formQuestionData),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+        Swal.fire({
+          icon: 'success',
+          title: 'Pertanyaan berhasil ditambahkan!',
+          text: result.message,
+          timer: 2000,
+          showConfirmButton: false,
+        }).then(() => {
+          window.location.reload(); // Reload the page after success
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal menambahkan pertanyaan!",
+          text: result.message,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal menambahkan pertanyaan!",
+          text: error.message,
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } 
+  });
+</script>

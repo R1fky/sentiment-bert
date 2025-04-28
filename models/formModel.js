@@ -22,7 +22,7 @@ export const submitForm = async (body) => {
 
       await prisma.answer.create({
         data: {
-          questionId: Number(questionId), // pastikan ini number
+          questionId: Number(questionId), //ini number
           nama,
           email,
           nim,
@@ -39,13 +39,6 @@ export const submitForm = async (body) => {
       });
     } catch (error) {
       console.error("Error inserting answer:", error);
-
-      if (error.isAxiosError) {
-        throw new Error("Gagal terhubung ke Model Sentimen (Flask API)");
-      }
-
-      // Kalau error Prisma atau error lain
-      throw new Error(error.message || "Gagal memproses jawaban");
     }
   }
   return insertedAnswers;
