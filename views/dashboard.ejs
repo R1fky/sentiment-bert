@@ -1,0 +1,56 @@
+<div class="container mt-5">
+  <h2>Distribusi Sentimen</h2>
+  <div style="width: 300px; height: 200px; margin: 0 auto">
+    <canvas id="sentimentChart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Data dari backend (pastikan sentimentCount sudah terdefinisi)
+  const sentimentData = {
+    positif: <%= sentimentCount?.positif || 0 %>,
+    netral: <%= sentimentCount?.netral || 0 %>,
+    negatif: <%= sentimentCount?.negatif || 0 %>
+  };
+
+  const ctx = document.getElementById('sentimentChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar', // Ganti 'pie' menjadi 'bar'
+    data: {
+      labels: ['Positif', 'Netral', 'Negatif'],
+      datasets: [{
+        label: 'Jumlah Sentimen',
+        data: [sentimentData.positif, sentimentData.netral, sentimentData.negatif],
+        backgroundColor: [
+          'rgba(75, 192, 192, 0.7)',  // Hijau untuk Positif
+          'rgba(255, 206, 86, 0.7)',   // Kuning untuk Netral
+          'rgba(255, 99, 132, 0.7)'    // Merah untuk Negatif
+        ],
+        borderColor: [
+          'rgba(75, 192, 192, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(255, 99, 132, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        y: {
+          beginAtZero: true, // Mulai sumbu Y dari 0
+          ticks: {
+            precision: 0 // Tidak menampilkan desimal
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false // Sembunyikan legenda (opsional)
+        }
+      }
+    }
+  });
+</script>

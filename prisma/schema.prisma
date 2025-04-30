@@ -25,6 +25,7 @@ model answer {
 model question {
   id            Int      @id @default(autoincrement())
   question_text String
+  question_category String
   question_type String   @default("radio")
   created_at    DateTime @default(now())
   answer        answer[]

@@ -1,0 +1,29 @@
+/* Active State untuk Navbar */
+.navbar .nav-link.active {
+  color: #ffd700 !important;
+  position: relative;
+}
+
+.navbar .nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #ffd700;
+  border-radius: 3px;
+}
+
+/* Active State untuk Mobile Footer */
+.d-lg-none .text-center.fw-bold {
+  color: #ffd700 !important;
+}
+
+.d-lg-none .text-center.fw-bold i {
+  color: #ffd700 !important;
+}
+.navbar .nav-link:hover:not(.active),
+.d-lg-none .text-center:not(.fw-bold):hover {
+  color: rgba(255, 215, 0, 0.8) !important;
+}

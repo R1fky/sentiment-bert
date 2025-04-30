@@ -14,23 +14,29 @@ export const showQuestion = async (req, res) => {
 };
 
 export const addQuestion = async (req, res) => {
-  const newQuestion = await questionModel.addQuestion(req.body);
   try {
-    if (req.header["content-type"] === "application/json") {
-      return res.json({
-        status: "success",
-        message: "Pertanyaan berhasil ditambahkan",
-        questions: newQuestion,
+    const newQuestion = await questionModel.addQuestion(req.body);
+
+    if (req.is("application/json")) {
+      return res.status(200).json({
+        success: true,
+        message: "Berhasil menambahkan pertanyaan",
+        questions : newQuestion 
+        // questions: await questionModel.getQuestion(newQuestion.id),
       });
+    } else {
+      return res.redirect("/question");
     }
   } catch (error) {
     console.error(error);
-    if (req.headers["content-type"] === "application/json") {
+    if (req.is("application/json")) {
       return res.status(500).json({
         success: false,
         message: "Gagal menambahkan pertanyaan",
         error: error.message,
       });
+    } else {
+      res.status(500).send("Gagal menambahkan pertanyaan.");
     }
   }
 };
