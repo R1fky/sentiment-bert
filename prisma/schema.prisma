@@ -8,25 +8,25 @@ datasource db {
 }
 
 model answer {
-  id              Int      @id @default(autoincrement())
+  id              Int       @id @default(autoincrement())
   questionId      Int
   nama            String
   email           String
   nim             String
-  answer_text     String
-  preProcess_text String?
+  answer_text     String     @db.VarChar(255)
+  preProcess_text String?    @db.VarChar(255) // ubah jadi varchar(255)
   sentiment       String?
-  created_at      DateTime @default(now())
-  question        question @relation(fields: [questionId], references: [id], map: "Answer_questionId_fkey")
+  created_at      DateTime   @default(now())
+  question        question   @relation(fields: [questionId], references: [id], map: "Answer_questionId_fkey")
 
   @@index([questionId], map: "Answer_questionId_fkey")
 }
 
 model question {
-  id            Int      @id @default(autoincrement())
-  question_text String
+  id                Int      @id @default(autoincrement())
+  question_text     String
   question_category String
-  question_type String   @default("radio")
-  created_at    DateTime @default(now())
-  answer        answer[]
+  question_type     String   @default("radio")
+  created_at        DateTime @default(now())
+  answer            answer[]
 }
