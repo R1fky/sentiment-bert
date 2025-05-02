@@ -1,10 +1,10 @@
 import express from "express";
-const router = express.Router();
-
 import * as questionController from "../controller/questionController.js";
 
+const router = express.Router();
+
 router.get("/", questionController.showQuestion);
-router.post('/addQuestion', questionController.addQuestion);
+router.get("/filter/:question_category", questionController.filterQuestion);
+router.post("/question-add", questionController.createQuestion);
 
 export default router;
-    

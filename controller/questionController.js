@@ -1,42 +1,30 @@
 import * as questionModel from "../models/questionModel.js";
 
 export const showQuestion = async (req, res) => {
-  try {
-    const questions = await questionModel.getQuestion();
-    res.render("question", {
-      title: "Question Page",
-      questions,
-      layout: "layouts/main",
-    });
-  } catch (error) {
-    console.log(error);
-  }
+  const questions = await questionModel.getQuestion();
+  const questions_category = await questionModel.getAllCategories();
+
+  res.render("question", {
+    title: "Question Page",
+    layout: "layouts/main",
+    questions,
+    questions_category
+  });
 };
 
-export const addQuestion = async (req, res) => {
-  try {
-    const newQuestion = await questionModel.addQuestion(req.body);
+export const filterQuestion = async (req, res) => {
+  const questions = await questionModel.filterQuestion(req.params);
+  const questions_category = await questionModel.getAllCategories();
 
-    if (req.is("application/json")) {
-      return res.status(200).json({
-        success: true,
-        message: "Berhasil menambahkan pertanyaan",
-        questions : newQuestion 
-        // questions: await questionModel.getQuestion(newQuestion.id),
-      });
-    } else {
-      return res.redirect("/question");
-    }
-  } catch (error) {
-    console.error(error);
-    if (req.is("application/json")) {
-      return res.status(500).json({
-        success: false,
-        message: "Gagal menambahkan pertanyaan",
-        error: error.message,
-      });
-    } else {
-      res.status(500).send("Gagal menambahkan pertanyaan.");
-    }
-  }
+  res.render("question", {
+    title: `${req.params.question_category}`,
+    layout: "layouts/main",
+    questions,
+    questions_category
+  });
+};
+
+export const createQuestion = async (req, res) => {
+  await questionModel.addQuestion(req.body);
+  res.redirect("/question");
 };

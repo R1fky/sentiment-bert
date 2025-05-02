@@ -5,17 +5,24 @@ export const getQuestion = async () => {
   return await prisma.question.findMany();
 };
 
-export const addQuestion = async (body) => {
-  const {question_text, question_type} = body
-  try {
-    const newQuestion = await prisma.question.create({
-      data: {
-        question_text,
-        question_type : question_type || "radio",
-      },
-    });
-    return newQuestion;
-  } catch (error) {
-    console.log(error);
-  }
-}
+export const addQuestion = async ({ question_text, question_type }) => {
+  return await prisma.question.create({
+    data: {
+      question_text,
+      question_type: question_type || "radio",
+    },
+  });
+};
+
+export const filterQuestion = async ({ question_category }) => {
+  return await prisma.question.findMany({
+    where: { question_category }
+  });
+};
+
+export const getAllCategories = async () => {
+  return await prisma.question.findMany({
+    distinct: ['question_category'],
+    select: { question_category: true }
+  });
+};
