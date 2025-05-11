@@ -1,21 +1,42 @@
-import axios from "axios";
+import * as dashboardModel from "../models/dashboardModel.js";
 
-export const getDashboardFromFlask = async (req, res) => {
+export const showDashboard = async (req, res) => {
   try {
-    const response = await axios.get("http://localhost:5000/api/sentiment-summary");
-    const sentimentCount = response.data;
+    const data = await dashboardModel.getDashboard();
+
+    const summary = {
+      positif: data.all.filter((d) => d.sentiment === "positif").length,
+      netral: data.all.filter((d) => d.sentiment === "netral").length,
+      negatif: data.all.filter((d) => d.sentiment === "negatif").length,
+    };
+
     res.render("dashboard", {
       title: "Dashboard Page",
       layout: "layouts/main",
-      sentimentCount : sentimentCount,
+      labels: data.labels,
+      positifData: data.positifData,
+      netralData: data.netralData,
+      negatifData: data.negatifData,
+      summary,
     });
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error("Gagal Konek API Flask", error.message);
-    }
-    res.json({
-      message: "Gagal ambil data dari API Flask",
-      error: error.message,
-    });
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 };
+
+// export const showDashboard = async (req, res) => {
+//   try {
+//     const { labels, positifData, netralData, negatifData } = await dashboardModel.getDashboard();
+//     res.render("dashboard", {
+//       title: "Dashboard",
+//       layout: "layouts/main",
+//       labels,
+//       positifData,
+//       netralData,
+//       negatifData,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching dashboard data:", error);
+//   }
+// };

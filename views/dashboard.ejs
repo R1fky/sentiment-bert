@@ -1,56 +1,97 @@
-<div class="container mt-5">
-  <h2>Distribusi Sentimen</h2>
-  <div style="width: 300px; height: 200px; margin: 0 auto">
-    <canvas id="sentimentChart"></canvas>
+<div class="container mt-4">
+  <h2 class="mb-4 fw-bold">Dashboard Analisis Sentimen Berdasarkan Kategori Pertanyaan</h2>
+
+  <!-- Blok Sentimen -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card text-white bg-success shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Positif</h5>
+          <p class="card-text fs-4"><%= summary.positif %> Jawaban</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-white bg-secondary shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Netral</h5>
+          <p class="card-text fs-4"><%= summary.netral %> Jawaban</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card text-white bg-danger shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">Negatif</h5>
+          <p class="card-text fs-4"><%= summary.negatif %> Jawaban</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Diagram Batang -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="card-title">Distribusi Sentimen per Kategori (%)</h5>
+      <canvas id="sentimentChart" height="120"></canvas>
+    </div>
   </div>
 </div>
 
+<!-- ChartJS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // Data dari backend (pastikan sentimentCount sudah terdefinisi)
-  const sentimentData = {
-    positif: <%= sentimentCount?.positif || 0 %>,
-    netral: <%= sentimentCount?.netral || 0 %>,
-    negatif: <%= sentimentCount?.negatif || 0 %>
-  };
-
   const ctx = document.getElementById('sentimentChart').getContext('2d');
   new Chart(ctx, {
-    type: 'bar', // Ganti 'pie' menjadi 'bar'
+    type: 'bar',
     data: {
-      labels: ['Positif', 'Netral', 'Negatif'],
-      datasets: [{
-        label: 'Jumlah Sentimen',
-        data: [sentimentData.positif, sentimentData.netral, sentimentData.negatif],
-        backgroundColor: [
-          'rgba(75, 192, 192, 0.7)',  // Hijau untuk Positif
-          'rgba(255, 206, 86, 0.7)',   // Kuning untuk Netral
-          'rgba(255, 99, 132, 0.7)'    // Merah untuk Negatif
-        ],
-        borderColor: [
-          'rgba(75, 192, 192, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(255, 99, 132, 1)'
-        ],
-        borderWidth: 1
-      }]
+      labels: <%- JSON.stringify(labels) %>,
+      datasets: [
+        {
+          label: 'Positif',
+          data: <%- JSON.stringify(positifData) %>,
+          backgroundColor: 'rgba(40, 167, 69, 0.7)',
+        },
+        {
+          label: 'Netral',
+          data: <%- JSON.stringify(netralData) %>,
+          backgroundColor: 'rgba(108, 117, 125, 0.7)',
+        },
+        {
+          label: 'Negatif',
+          data: <%- JSON.stringify(negatifData) %>,
+          backgroundColor: 'rgba(220, 53, 69, 0.7)',
+        }
+      ]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,
       scales: {
         y: {
-          beginAtZero: true, // Mulai sumbu Y dari 0
+          beginAtZero: true,
+          max: 100,
+          title: {
+            display: true,
+            text: 'Persentase (%)'
+          }
+        },
+        x: {
           ticks: {
-            precision: 0 // Tidak menampilkan desimal
+            autoSkip: false,
+            maxRotation: 30,
+            minRotation: 15
           }
         }
       },
       plugins: {
-        legend: {
-          display: false // Sembunyikan legenda (opsional)
+        legend: { position: 'top' },
+        tooltip: {
+          callbacks: {
+            label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%'
+          }
         }
       }
     }
   });
 </script>
+ 

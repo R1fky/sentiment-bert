@@ -67,7 +67,15 @@
           <div class="mb-3">
             <label for="question_type" class="form-label">Tipe Pertanyaan</label>
             <select class="form-select" id="question_type" name="question_type">
-              <option value="radio" selected>Radio (Sangat Puas / Puas / Tidak Puas)</option>
+              <option value="radio" selected>(Sangat Puas / Puas / Tidak Puas/ Netral / Sangat Tidak Puas)</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="question_category" class="form-label">Pilih Kategori</label>
+            <select class="form-select" id="question_category" name="question_category">
+              <option value="Metode Pembelajaran" selected>Metode Pembelajaran</option>
+              <option value="Proses Pembelajaran">Proses Pembelajaran</option>
+              <option value="Fasilitas dan Sarana">Fasilitas dan Sarana</option>
             </select>
           </div>
         </div>
@@ -89,6 +97,7 @@
     const formQuestionData = {
       question_text: document.getElementById("question_text").value,
       question_type: document.getElementById("question_type").value,
+      question_category: document.getElementById("question_category").value,
     };
 
     try {

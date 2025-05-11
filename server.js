@@ -4,6 +4,7 @@ import expressEjsLayouts from "express-ejs-layouts";
 import questionRouter from "./routes/questionRoute.js";
 import formRouter from "./routes/formRoute.js";
 import dashboardRouter from "./routes/dashboardRoute.js";
+import answersRouter from "./routes/asnwersRoute.js";
 
 const app = express();
 const port = 4000;
@@ -29,6 +30,8 @@ app.get("/", (req, res) => {
 app.use("/question", questionRouter);
 app.use("/form", formRouter);
 app.use("/dashboard", dashboardRouter);
+//import batch answer
+app.use('/', answersRouter)
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);

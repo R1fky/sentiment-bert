@@ -8,7 +8,7 @@ export const showQuestion = async (req, res) => {
     title: "Question Page",
     layout: "layouts/main",
     questions,
-    questions_category
+    questions_category,
   });
 };
 
@@ -20,11 +20,21 @@ export const filterQuestion = async (req, res) => {
     title: `${req.params.question_category}`,
     layout: "layouts/main",
     questions,
-    questions_category
+    questions_category,
   });
 };
 
 export const createQuestion = async (req, res) => {
-  await questionModel.addQuestion(req.body);
-  res.redirect("/question");
+  try {
+    await questionModel.addQuestion(req.body);
+    res.status(200).json({
+      success: true,
+      message: "Question Baru di Tambahkan",
+    });
+  } catch (error) {
+    res.status(200).json({
+      success: false,
+      message: "Question Baru di Tambahkan",
+    });
+  }
 };

@@ -8,7 +8,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
     "seed": "node prisma/seed.js",
-    "seedAnswers": "node prisma/importAnswers.js"
+    "seedAnswers": "node prisma/importAnswer.js"
   },
   "keywords": [],
   "author": "",
