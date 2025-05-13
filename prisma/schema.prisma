@@ -8,16 +8,16 @@ datasource db {
 }
 
 model answer {
-  id              Int       @id @default(autoincrement())
+  id              Int      @id @default(autoincrement())
   questionId      Int
   nama            String
   email           String
   nim             String
-  answer_text     String     @db.VarChar(255)
-  preProcess_text String?    @db.VarChar(255) // ubah jadi varchar(255)
+  answer_text     String   @db.VarChar(255)
+  preProcess_text String?  @db.VarChar(255) // ubah jadi varchar(255)
   sentiment       String?
-  created_at      DateTime   @default(now())
-  question        question   @relation(fields: [questionId], references: [id], map: "Answer_questionId_fkey")
+  created_at      DateTime @default(now())
+  question        question @relation(fields: [questionId], references: [id], map: "Answer_questionId_fkey")
 
   @@index([questionId], map: "Answer_questionId_fkey")
 }
@@ -29,4 +29,18 @@ model question {
   question_type     String   @default("radio")
   created_at        DateTime @default(now())
   answer            answer[]
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+  USER
+}
+
+model user {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
 }
