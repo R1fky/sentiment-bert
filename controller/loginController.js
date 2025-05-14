@@ -1,4 +1,7 @@
 import * as loginModel from "../models/loginModel.js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 export const SignUp = async (req, res) => {
   try {
@@ -30,14 +33,24 @@ export const login = async (req, res) => {
     }
 
     const user = await loginModel.loginUser(username, password);
+    // get token jwt
+    const token = jwt.sign(
+      {
+        id: user.id,
+        username: user.username,
+        role: user.role,
+      },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "1h",
+      }
+    );
     // jika berhasil
     res.status(200).json({
       success: true,
       message: "Login successful",
-      user: {
-        id: user.id,
-        username: user.username,
-      },
+      token: token,
+      data:user
     });
   } catch (error) {
     console.error("Error login:", error);

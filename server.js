@@ -7,6 +7,7 @@ import dashboardRouter from "./routes/dashboardRoute.js";
 import answersRouter from "./routes/asnwersRoute.js";
 import loginRouter from "./routes/loginRoute.js";
 
+
 const app = express();
 const port = 4000;
 
@@ -32,8 +33,8 @@ app.use("/question", questionRouter);
 app.use("/form", formRouter);
 app.use("/dashboard", dashboardRouter);
 //import batch answer
-app.use('/', answersRouter)
-app.use("/login", loginRouter);
+app.use("/", answersRouter);
+app.use("/auth", loginRouter);
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);

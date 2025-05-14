@@ -1,15 +1,24 @@
 import * as questionModel from "../models/questionModel.js";
 
 export const showQuestion = async (req, res) => {
-  const questions = await questionModel.getQuestion();
-  const questions_category = await questionModel.getAllCategories();
+  try {
+    const questions = await questionModel.getQuestion();
+    const questions_category = await questionModel.getAllCategories();
 
-  res.render("question", {
-    title: "Question Page",
-    layout: "layouts/main",
-    questions,
-    questions_category,
-  });
+   
+    // if (!user) {
+    //   return res.redirect("/");
+    // }
+    res.render("question", {
+      title: "Question Page",
+      layout: "layouts/main",
+      questions,
+      questions_category,
+    });
+  } catch (error) {
+    console.error("Error fetching questions:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 export const filterQuestion = async (req, res) => {

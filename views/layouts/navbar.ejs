@@ -24,7 +24,7 @@
           <i class="bi bi-search"></i>
         </button>
       </form>
-      <a href="/login" type="button" class="btn btn-warning">Login</a>
+      <div id="auth"></div>
     </div>
   </div>
 </nav>
@@ -46,7 +46,26 @@
         <small>Question</small>
       </a>
     </div>
+    <button onclick=""></button>
   </div>
 </div>
+<script>
+  const user = localStorage.getItem("user");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const auth = document.getElementById("auth");
 
+  if (auth) {
+    if (parsedUser) {
+      auth.innerHTML = `<button onclick="handleLogout()" class="btn btn-danger" href="/cauth/logout" >Logout</button>`;
+    } else {
+      auth.innerHTML = `<a class="btn btn-warning" href="/auth">Login</a>`;
+    }
+  }
+  function handleLogout() {
+    console.log("Logout");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    window.location.href = "/auth";
+  }
+</script>
 <script src="/js/navbar.js"></script>

@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     layout: 'layouts/main',
   })
 })
-router.post('/', loginController.login)
+router.post('/login', loginController.login)
 router.post('/signUp', loginController.SignUp)
 
 

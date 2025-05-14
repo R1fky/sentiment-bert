@@ -6,7 +6,7 @@ document.getElementById("loginUser").addEventListener("submit", async function (
   };
 
   try {
-    const response = await fetch("/login", {
+    const response = await fetch("/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -25,6 +25,15 @@ document.getElementById("loginUser").addEventListener("submit", async function (
         timer: 2000,
         showConfirmButton: false,
       }).then(() => {
+        localStorage.setItem("token", result.token);
+        console.log(result);
+        const user = {
+          id: result.data.id,
+          username: result.data.username,
+          role: result.data.role,
+        };
+        localStorage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("ddsada", "otoh");
         window.location.href = "/"; // Reload the page after success
       });
     } else {
