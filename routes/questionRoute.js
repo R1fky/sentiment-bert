@@ -6,6 +6,13 @@ const router = express.Router();
 router.get("/", questionController.showQuestion);
 
 router.get("/filter/:question_category", questionController.filterQuestion);
+
+router.get("/add-question", (req, res) => {
+  res.render("pages/addQuestion", {
+    title: "Add Question",
+    layout: "layouts/main",
+  });
+});
 router.post("/question-add", auth.authenticateJWT, questionController.createQuestion);
 
 export default router;

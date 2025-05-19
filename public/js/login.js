@@ -15,7 +15,6 @@ document.getElementById("loginUser").addEventListener("submit", async function (
     });
 
     const result = await response.json();
-    console.log(result);
 
     if (result.success) {
       Swal.fire({
@@ -26,14 +25,12 @@ document.getElementById("loginUser").addEventListener("submit", async function (
         showConfirmButton: false,
       }).then(() => {
         localStorage.setItem("token", result.token);
-        console.log(result);
         const user = {
           id: result.data.id,
           username: result.data.username,
           role: result.data.role,
         };
         localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("ddsada", "otoh");
         window.location.href = "/"; // Reload the page after success
       });
     } else {

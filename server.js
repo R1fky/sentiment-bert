@@ -24,7 +24,7 @@ app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   res.render("index", {
-    title: "Dashboard",
+    title: "Home Page",
     layout: "layouts/main",
   });
 });

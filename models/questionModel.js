@@ -5,7 +5,7 @@ export const getQuestion = async () => {
   return await prisma.question.findMany();
 };
 
-export const addQuestion = async ({ question_text, question_type, question_category }) => {
+export const addQuestion = async (questionsToAdd) => {
   return await prisma.question.create({
     data: {
       question_text,

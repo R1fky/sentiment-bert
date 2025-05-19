@@ -17,7 +17,7 @@
           <li><a class="dropdown-item" href="#">Fasilitas Pembelajaran</a></li>
         </ul>
       </div>
-      <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#addQuestion"><i class="bi bi-plus-lg"></i> Add Question</button>
+      <a href="/question/add-question" type="button" class="btn btn-outline-warning" ><i class="bi bi-plus-lg"></i> Add Question</a>
     </div>
   </div>
 
@@ -50,49 +50,10 @@
   </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="addQuestion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form id="formAddQuestion">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Tambah Pertanyaan</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="question_text" class="form-label">Isi Pertanyaan</label>
-            <textarea class="form-control" id="question_text" name="question_text" required placeholder="Masukkan teks pertanyaan"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="question_type" class="form-label">Tipe Pertanyaan</label>
-            <select class="form-select" id="question_type" name="question_type">
-              <option value="radio" selected>(Sangat Puas / Puas / Tidak Puas/ Netral / Sangat Tidak Puas)</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="question_category" class="form-label">Pilih Kategori</label>
-            <select class="form-select" id="question_category" name="question_category">
-              <option value="Metode Pembelajaran" selected>Metode Pembelajaran</option>
-              <option value="Proses Pembelajaran">Proses Pembelajaran</option>
-              <option value="Fasilitas dan Sarana">Fasilitas dan Sarana</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-          <button type="submit" class="btn btn-primary">Simpan</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 <!-- end Modal  -->
 
 <script>
   const isLogin = localStorage.getItem("user");
-  const token = localStorage.getItem("token");
   if (!isLogin || !token) {
     window.location.href = "/"; // Redirect to login page
   }
@@ -107,7 +68,6 @@
 
     try {
       const token = localStorage.getItem("token");
-      console.log(token);
       if (!token) {
         Swal.fire({
           icon: "error",
@@ -158,4 +118,5 @@
       });
     }
   });
+  
 </script>

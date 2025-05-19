@@ -56,7 +56,7 @@
 
   if (auth) {
     if (parsedUser) {
-      auth.innerHTML = `<button onclick="handleLogout()" class="btn btn-danger" href="/cauth/logout" >Logout</button>`;
+      auth.innerHTML = `<button onclick="handleLogout()" class="btn btn-danger" href="/auth/logout" >Logout</button>`;
     } else {
       auth.innerHTML = `<a class="btn btn-warning" href="/auth">Login</a>`;
     }

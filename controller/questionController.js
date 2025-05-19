@@ -4,11 +4,6 @@ export const showQuestion = async (req, res) => {
   try {
     const questions = await questionModel.getQuestion();
     const questions_category = await questionModel.getAllCategories();
-
-   
-    // if (!user) {
-    //   return res.redirect("/");
-    // }
     res.render("question", {
       title: "Question Page",
       layout: "layouts/main",
@@ -35,7 +30,21 @@ export const filterQuestion = async (req, res) => {
 
 export const createQuestion = async (req, res) => {
   try {
-    await questionModel.addQuestion(req.body);
+    const { question_text, category, answer_type } = req.body;
+    if (!Array.isArray(question_text)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid input format",
+      });
+    }
+    const questionsToAdd = question_text.map((text, index) => ({
+      question_text: text,
+      question_type: answer_type[index] || "radio",
+      question_category: category[index],
+    }));
+
+    await questionModel.addQuestion(questionsToAdd);
+
     res.status(200).json({
       success: true,
       message: "Question Baru di Tambahkan",
