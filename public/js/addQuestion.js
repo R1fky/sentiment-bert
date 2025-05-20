@@ -17,6 +17,7 @@ addBtn.addEventListener("click", () => {
 
   questionCount++;
 
+  // form
   const questionHTML = `
       <div class="question-block mb-4 p-4 border rounded-3 bg-light shadow-sm">
         <h5 class="mb-3 text-secondary">
@@ -30,19 +31,19 @@ addBtn.addEventListener("click", () => {
         </div>
 
         <!-- Kategori Pertanyaan -->
-        <div class="mb-3">
-          <label class="form-label fw-bold">Kategori Pertanyaan</label>
-          <select class="form-select" name="category[]" required>
-            <option disabled selected value="">-- Pilih Kategori --</option>
-            <option value="Metode Pembelajaran">Metode Pembelajaran</option>
-            <option value="Proses Pembelajaran">Proses Pembelajaran</option>
-            <option value="Fasilitas dan Sarana">Fasilitas dan Sarana</option>
-          </select>
-        </div>
+       <div class="mb-3">
+              <label class="form-label fw-bold">Kategori Pertanyaan</label>
+              <select class="form-select" name="question_category[]" required>
+                <option disabled selected value="">-- Pilih Kategori --</option>
+                <option value="Metode Pembelajaran">Metode Pembelajaran</option>
+                <option value="Proses Pembelajaran">Proses Pembelajaran</option>
+                <option value="Fasilitas dan Sarana">Fasilitas dan Sarana</option>
+              </select>
+            </div>
 
         <!-- Hidden Input: Tipe Jawaban tetap radio -->
         <input type="hidden" name="answer_type[]" value="radio" />
-        <p class="text-muted small fst-italic">Tipe jawaban: Skala kepuasan</p>
+        <p class="text-muted small fst-italic">Tipe jawaban: Skala kepuasan (Sangat Puas → Sangat Tidak Puas)</p>
       </div>
     `;
 
@@ -67,7 +68,6 @@ document.getElementById("addQuestionform").addEventListener("submit", async func
     answer_type,
   };
 
-  console.log(addForm); // Debug hasilnya di konsol
   try {
     const response = await fetch("/question/question-add", {
       method: "POST",
@@ -79,7 +79,6 @@ document.getElementById("addQuestionform").addEventListener("submit", async func
     });
 
     const result = await response.json();
-    console.log(result); // Debug hasilnya di konsol
 
     if (result.success) {
       Swal.fire({

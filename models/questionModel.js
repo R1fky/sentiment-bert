@@ -6,13 +6,17 @@ export const getQuestion = async () => {
 };
 
 export const addQuestion = async (questionsToAdd) => {
-  return await prisma.question.create({
-    data: {
-      question_text,
-      question_type: question_type || "radio",
-      question_category: question_category,
-    },
-  });
+  return await Promise.all(
+    questionsToAdd.map((q) =>
+      prisma.question.create({
+        data: {
+          question_text: q.question_text,
+          question_type: q.question_type || "radio",
+          question_category: q.question_category,
+        },
+      })
+    )
+  );
 };
 
 export const filterQuestion = async ({ question_category }) => {

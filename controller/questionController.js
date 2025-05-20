@@ -37,11 +37,26 @@ export const createQuestion = async (req, res) => {
         message: "Invalid input format",
       });
     }
-    const questionsToAdd = question_text.map((text, index) => ({
-      question_text: text,
-      question_type: answer_type[index] || "radio",
-      question_category: category[index],
-    }));
+    // const questionsToAdd = question_text.map((text, index) => ({
+    //   question_text: text,
+    //   question_type: answer_type[index] || "radio",
+    //   question_category: category[index],
+    // }));
+
+    // debug
+    const questionsToAdd = question_text.map((text, index) => {
+      const cat = category[index];
+      if (!cat) {
+        throw new Error(`Kategori tidak ditemukan untuk pertanyaan ke-${index + 1}`);
+      }
+
+      return {
+        question_text: text,
+        question_type: answer_type[index] || "radio",
+        question_category: cat,
+      };
+    });
+    // console.log("Data yang dikirim ke database:", questionsToAdd);
 
     await questionModel.addQuestion(questionsToAdd);
 
@@ -52,7 +67,8 @@ export const createQuestion = async (req, res) => {
   } catch (error) {
     res.status(200).json({
       success: false,
-      message: "Question Baru di Tambahkan",
+      message: "Question Gagal di Tambahkan",
+      error: error.message,
     });
   }
 };
