@@ -5,4 +5,3 @@ const router = express.Router();
 router.get("/analyzeBatch", asnwersController.analyzeUnprocessedAnswers);
 
 export default router;
-

@@ -21,8 +21,7 @@ export const analyzeUnprocessedAnswers = async (req, res) => {
     const response = await axios.post("http://localhost:5000/predict-batch", { texts });
 
     const predictions = response.data;
-    console.log("Predictions:", predictions); // Kalau ini tidak muncul, berarti request error
-
+    console.log("Predictions:", predictions); 
     if (predictions.length !== answers.length) {
       console.error("Jumlah prediksi tidak cocok dengan jumlah jawaban!");
       return res.status(500).json({ error: "Jumlah prediksi tidak cocok dengan data jawaban." });

@@ -1,48 +1,136 @@
-<div class="container mt-4">
-  <h2 class="mb-4 fw-bold">Dashboard Analisis Sentimen Berdasarkan Kategori Pertanyaan</h2>
+<style>
+  body {
+    background: #f4f6fa;
+    font-family: "Segoe UI", sans-serif;
+  }
+  .dashboard-header {
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+  }
+  .card-box {
+    border-radius: 15px;
+    padding: 20px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  }
+  .card-icon {
+    font-size: 1.8rem;
+    opacity: 0.7;
+  }
+  .info-box {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  .section-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+</style>
 
-  <!-- Blok Sentimen -->
+<div class="container py-4">
+  <h2 class="dashboard-header">Dashboard Analisis Sentimen</h2>
+
+  <!-- Top Summary Cards -->
   <div class="row mb-4">
     <div class="col-md-4">
-      <div class="card text-white bg-success shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title">Positif</h5>
-          <p class="card-text fs-4"><%= summary.positif %> Jawaban</p>
+      <div class="card-box" style="background: #198754">
+        <div>
+          <div class="info-box"><%= summary.positif %> Jawaban</div>
+          <div>Sentimen Positif</div>
         </div>
+        <div class="card-icon"><i class="bi bi-emoji-smile"></i></div>
       </div>
     </div>
     <div class="col-md-4">
-      <div class="card text-white bg-secondary shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title">Netral</h5>
-          <p class="card-text fs-4"><%= summary.netral %> Jawaban</p>
+      <div class="card-box" style="background: #6c757d">
+        <div>
+          <div class="info-box"><%= summary.netral %> Jawaban</div>
+          <div>Sentimen Netral</div>
         </div>
+        <div class="card-icon"><i class="bi bi-emoji-neutral"></i></div>
       </div>
     </div>
     <div class="col-md-4">
-      <div class="card text-white bg-danger shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title">Negatif</h5>
-          <p class="card-text fs-4"><%= summary.negatif %> Jawaban</p>
+      <div class="card-box" style="background: #dc3545">
+        <div>
+          <div class="info-box"><%= summary.negatif %> Jawaban</div>
+          <div>Sentimen Negatif</div>
         </div>
+        <div class="card-icon"><i class="bi bi-emoji-frown"></i></div>
       </div>
     </div>
   </div>
 
-  <!-- Diagram Batang -->
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <h5 class="card-title">Distribusi Sentimen per Kategori (%)</h5>
-      <canvas id="sentimentChart" height="120"></canvas>
+  <!-- Chart Section -->
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <div class="card shadow-sm p-4">
+        <h5 class="section-title">Distribusi Sentimen Berdasarkan Kategori</h5>
+        <canvas id="sentimentChart" height="300"></canvas>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm p-4">
+        <h5 class="section-title">Persentase Sentimen</h5>
+        <canvas id="sentimentPieChart" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Section -->
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3">
+        <h5 class="section-title">Aktivitas Terbaru</h5>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Task Updated - <small>40 min ago</small></li>
+          <li class="list-group-item">Jawaban Baru - <small>1 jam lalu</small></li>
+          <li class="list-group-item">Feedback Dipublikasikan - <small>3 jam lalu</small></li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm p-3">
+        <h5 class="section-title">Status Tanggapan</h5>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Kategori</th>
+              <th>Responden</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Pelayanan</td>
+              <td>30</td>
+              <td><span class="badge bg-success">Selesai</span></td>
+            </tr>
+            <tr>
+              <td>Akademik</td>
+              <td>45</td>
+              <td><span class="badge bg-warning text-dark">Diproses</span></td>
+            </tr>
+            <tr>
+              <td>Fasilitas</td>
+              <td>25</td>
+              <td><span class="badge bg-danger">Tertunda</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ChartJS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Chart.js Scripts -->
 <script>
-  const ctx = document.getElementById('sentimentChart').getContext('2d');
-  new Chart(ctx, {
+  const ctxBar = document.getElementById('sentimentChart').getContext('2d');
+  new Chart(ctxBar, {
     type: 'bar',
     data: {
       labels: <%- JSON.stringify(labels) %>,
@@ -50,17 +138,17 @@
         {
           label: 'Positif',
           data: <%- JSON.stringify(positifData) %>,
-          backgroundColor: 'rgba(40, 167, 69, 0.7)',
+          backgroundColor: '#198754'
         },
         {
           label: 'Netral',
           data: <%- JSON.stringify(netralData) %>,
-          backgroundColor: 'rgba(108, 117, 125, 0.7)',
+          backgroundColor: '#6c757d'
         },
         {
           label: 'Negatif',
           data: <%- JSON.stringify(negatifData) %>,
-          backgroundColor: 'rgba(220, 53, 69, 0.7)',
+          backgroundColor: '#dc3545'
         }
       ]
     },
@@ -69,29 +157,32 @@
       scales: {
         y: {
           beginAtZero: true,
-          max: 100,
           title: {
             display: true,
             text: 'Persentase (%)'
-          }
-        },
-        x: {
-          ticks: {
-            autoSkip: false,
-            maxRotation: 30,
-            minRotation: 15
-          }
-        }
-      },
-      plugins: {
-        legend: { position: 'top' },
-        tooltip: {
-          callbacks: {
-            label: ctx => ctx.dataset.label + ': ' + ctx.raw + '%'
           }
         }
       }
     }
   });
+
+  const ctxPie = document.getElementById('sentimentPieChart').getContext('2d');
+  new Chart(ctxPie, {
+    type: 'doughnut',
+    data: {
+      labels: ['Positif', 'Netral', 'Negatif'],
+      datasets: [{
+        data: [<%= summary.positif %>, <%= summary.netral %>, <%= summary.negatif %>],
+        backgroundColor: ['#198754', '#6c757d', '#dc3545']
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
 </script>
- 

@@ -24,19 +24,3 @@ export const showDashboard = async (req, res) => {
     res.status(500).send("Internal Server Error");
   }
 };
-
-// export const showDashboard = async (req, res) => {
-//   try {
-//     const { labels, positifData, netralData, negatifData } = await dashboardModel.getDashboard();
-//     res.render("dashboard", {
-//       title: "Dashboard",
-//       layout: "layouts/main",
-//       labels,
-//       positifData,
-//       netralData,
-//       negatifData,
-//     });
-//   } catch (error) {
-//     console.error("Error fetching dashboard data:", error);
-//   }
-// };
