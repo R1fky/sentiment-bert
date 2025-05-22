@@ -1,5 +1,4 @@
 import * as formModel from "../models/formModel.js";
-
 export const getAllQuestion = async (req, res) => {
   try {
     const questions = await formModel.getQuestion();
@@ -28,3 +27,28 @@ export const submitForm = async (req, res) => {
     });
   }
 };
+
+export const showSentimentUser = async (req, res) => {
+  try {
+    const { nama, email, nim } = req.query;
+    const data = await formModel.getSentimentUser(nama, email, nim);
+
+    // Hitung jumlah sentimen
+    const sentimentCounts = {
+      positif: data.filter((d) => d.sentiment === "positif").length,
+      netral: data.filter((d) => d.sentiment === "netral").length,
+      negatif: data.filter((d) => d.sentiment === "negatif").length,
+    };
+
+    res.render("sentimentUser", {
+      title: "Sentimen User",
+      layout: "layouts/main",
+      data,
+      sentimentCounts,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+};
+

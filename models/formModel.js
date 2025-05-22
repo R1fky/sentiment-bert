@@ -43,3 +43,25 @@ export const submitForm = async (body) => {
   }
   return insertedAnswers;
 };
+
+export const getSentimentUser = async (nama, email, nim) => {
+  try {
+    const data = await prisma.answer.findMany({
+      where: {
+        nama,
+        email,
+        nim,
+      },
+      include: {
+        question: {
+          select: {
+            question_text: true,
+          },
+        },
+      },
+    });
+    return data;
+  } catch (error) {
+    console.error("Error fetching sentiment user:", error);
+  }
+};

@@ -103,7 +103,8 @@
         });
 
         setTimeout(() => {
-          window.location.href = "/dashboard"; //mengarahka ke dashboard page
+          window.location.href = `/form/sentimenUser?nama=${encodeURIComponent(nama)}&email=${encodeURIComponent(email)}&nim=${encodeURIComponent(nim)}`;
+          //arahkan ke setimenUser
         }, 2000);
       } else {
         Swal.fire({

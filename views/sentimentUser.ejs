@@ -1,0 +1,120 @@
+<div class="container-fluid py-4" style="background-color: #f4f6fa; min-height: 100vh;">
+  <div class="row justify-content-center">
+    <!-- Blok Utama -->
+    <div class="col-lg-10">
+      <div class="row g-4">
+        <!-- Grafik Sentimen -->
+        <div class="col-md-8">
+          <div class="card shadow-sm border-0">
+            <div class="card-body">
+              <h5 class="card-title mb-4">Distribusi Sentimen Jawaban</h5>
+              <canvas id="sentimentBarChart" style="height: 280px"></canvas>
+            </div>
+          </div>
+
+          <div class="card shadow-sm border-0 mt-4">
+            <div class="card-header bg-white border-bottom"><strong>Detail Jawaban Anda</strong></div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Pertanyaan</th>
+                      <th>Jawaban</th>
+                      <th>Sentimen</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% data.forEach((item) => { %>
+                    <tr>
+                      <td><%= item.question?.question_text || "?" %></td>
+                      <td><%= item.answer_text %></td>
+                      <td>
+                        <span class="badge 
+                          <%= item.sentiment === 'positif' ? 'bg-success' : item.sentiment === 'netral' ? 'bg-warning text-dark' : 'bg-danger' %>">
+                          <%= item.sentiment %>
+                        </span>
+                      </td>
+                    </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blok Profil -->
+        <div class="col-md-4">
+          <div class="card text-center shadow-sm border-0 p-4">
+            
+            <h5 class="mb-1"><%= data[0]?.nama || "Tidak Diketahui" %></h5>
+            <p class="text-muted mb-3">Mahasiswa</p>
+            <hr>
+            <h6 class="mb-3">Ringkasan Sentimen</h6>
+            <ul class="list-group text-start shadow-sm">
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Positif</span><span><%= sentimentCounts.positif %></span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Netral</span><span><%= sentimentCounts.netral %></span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between">
+                <span>Negatif</span><span><%= sentimentCounts.negatif %></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('sentimentBarChart').getContext('2d');
+
+  const gradientPositif = ctx.createLinearGradient(0, 0, 400, 0);
+  gradientPositif.addColorStop(0, 'rgba(75, 192, 192, 0.7)');
+  gradientPositif.addColorStop(1, 'rgba(75, 192, 192, 1)');
+
+  const gradientNetral = ctx.createLinearGradient(0, 0, 400, 0);
+  gradientNetral.addColorStop(0, 'rgba(255, 205, 86, 0.7)');
+  gradientNetral.addColorStop(1, 'rgba(255, 205, 86, 1)');
+
+  const gradientNegatif = ctx.createLinearGradient(0, 0, 400, 0);
+  gradientNegatif.addColorStop(0, 'rgba(255, 99, 132, 0.7)');
+  gradientNegatif.addColorStop(1, 'rgba(255, 99, 132, 1)');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Positif', 'Netral', 'Negatif'],
+      datasets: [{
+        label: 'Jumlah Sentimen',
+        data: [<%= sentimentCounts.positif %>, <%= sentimentCounts.netral %>, <%= sentimentCounts.negatif %>],
+        backgroundColor: [gradientPositif, gradientNetral, gradientNegatif],
+        borderWidth: 1,
+        borderRadius: 10,
+        barThickness: 25
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      animation: {
+        duration: 1000,
+        easing: 'easeOutQuart'
+      },
+      plugins: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: 'Distribusi Sentimen Jawaban Anda',
+          font: { size: 18, weight: 'bold' },
+          color: '#333'
+        }
+      }
+    }
+  });
+</script>
