@@ -101,11 +101,15 @@
           timer: 2000,
           showConfirmButton: false,
         });
+        // generate signature
+        const sigRes = await fetch("/form/generate-signature", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nama, email, nim }),
+        });
+        const { signature } = await sigRes.json();
 
-        setTimeout(() => {
-          window.location.href = `/form/sentimenUser?nama=${encodeURIComponent(nama)}&email=${encodeURIComponent(email)}&nim=${encodeURIComponent(nim)}`;
-          //arahkan ke setimenUser
-        }, 2000);
+        window.location.href = `/form/sentimenUser?nama=${encodeURIComponent(nama)}&email=${encodeURIComponent(email)}&nim=${encodeURIComponent(nim)}&sig=${signature}`;
       } else {
         Swal.fire({
           icon: "error",

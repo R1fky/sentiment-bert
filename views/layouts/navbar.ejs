@@ -1,18 +1,15 @@
-<!-- Top Navbar (Mobile Only) -->
-<link rel="stylesheet" href="css/nav.css" />
+<link rel="stylesheet" href="/css/nav.css" />
 
+<!-- ✅ Navbar Mobile (Top Only) -->
 <div class="d-lg-none text-white px-4 py-3 d-flex justify-content-between align-items-center shadow-sm" style="background: linear-gradient(135deg, #6a0dad 0%, #8e44ad 100%); font-size: 1rem">
   <div class="fw-semibold">PNL Sentimen</div>
-  <div class="d-flex align-items-center gap-2" id="mobile-user" style="max-width: 50%">
-    <span id="mobile-username" class="small text-white text-truncate d-none"></span>
-    <button id="mobile-login-btn" class="btn btn-warning btn-sm px-3 py-1">Login</button>
-    <button id="mobile-logout-btn" class="btn btn-danger btn-sm px-3 py-1 d-none">Logout</button>
+  <div id="mobile-auth">
+    <!-- Akan diisi oleh JS -->
   </div>
 </div>
-
-<!-- Sidebar (visible on lg+) -->
+<!-- ✅ Sidebar Desktop (Visible on lg+) -->
 <nav class="d-none d-lg-flex flex-column bg-gradient text-white p-3" style="width: 240px; background: linear-gradient(135deg, #6a0dad 0%, #8e44ad 100%)">
-  <a href="#" class="navbar-brand fw-bold mb-4 text-white"> <i class="bi bi-emoji-heart-eyes"></i> PNL Sentimen </a>
+  <a href="/" class="navbar-brand fw-bold mb-4 text-white"> <i class="bi bi-emoji-heart-eyes"></i> PNL Sentimen </a>
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
       <a class="nav-link text-white <%= (title === 'Dashboard') ? 'active fw-bold bg-white text-dark' : '' %>" href="/dashboard"> <i class="bi bi-house-door"></i> Dashboard </a>
@@ -24,10 +21,12 @@
       <a class="nav-link text-white <%= (title === 'Question') ? 'active fw-bold bg-white text-dark' : '' %>" href="/question"> <i class="bi bi-patch-question"></i> Question </a>
     </li>
   </ul>
-  <div id="auth" class="mt-auto"></div>
+  <div id="auth" class="mt-auto">
+    <!-- Akan diisi oleh JS -->
+  </div>
 </nav>
 
-<!-- Bottom Navbar (visible on mobile) -->
+<!-- ✅ Bottom Navbar (Mobile Only) -->
 <nav class="d-lg-none fixed-bottom bg-gradient py-2" style="background: linear-gradient(135deg, #6a0dad 0%, #8e44ad 100%)">
   <div class="container-fluid d-flex justify-content-around text-white">
     <a href="/dashboard" class="text-center <%= (title === 'Dashboard') ? 'fw-bold' : '' %>"> <i class="bi bi-house-door d-block"></i><small>Dashboard</small> </a>

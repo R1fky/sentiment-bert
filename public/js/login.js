@@ -42,5 +42,13 @@ document.getElementById("loginUser").addEventListener("submit", async function (
         showConfirmButton: false,
       });
     }
-  } catch (error) {}
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Failed to Login",
+      text: result.message,
+      timer: 2000,
+      showConfirmButton: false,
+    });
+  }
 });
