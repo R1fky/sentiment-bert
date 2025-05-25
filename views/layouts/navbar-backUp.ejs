@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="/css/nav.css" />
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: linear-gradient(135deg, #6a0dad 0%, #8e44ad 100%)">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="#"> <i class="bi bi-emoji-heart-eyes"></i> PNL Sentimen </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link <%= (title === 'Dashboard') ? 'active' : '' %>" href="/dashboard"> <i class="bi bi-house-door"></i> Dashboard </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= (title === 'Form') ? 'active' : '' %>" href="/form"> <i class="bi bi-input-cursor-text"></i> Form </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= (title === 'Question') ? 'active' : '' %>" href="/question"> <i class="bi bi-patch-question"></i> Question </a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search..." />
+        <button class="btn btn-outline-warning me-2" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
+      </form>
+      <div id="auth"></div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Footer (Hanya muncul di layar kecil) -->
+<div class="d-lg-none fixed-bottom py-2" style="background: #6a0dad">
+  <div class="container-fluid">
+    <div class="d-flex justify-content-around">
+      <a href="/" class="text-white text-center <%= (title === 'Home') ? 'fw-bold' : '' %>">
+        <i class="bi bi-house-door d-block"></i>
+        <small>Home</small>
+      </a>
+      <a href="/form" class="text-white text-center <%= (title === 'Form') ? 'fw-bold' : '' %>">
+        <i class="bi bi-input-cursor-text d-block"></i>
+        <small>Form</small>
+      </a>
+      <a href="/question" class="text-white text-center <%= (title === 'Question') ? 'fw-bold' : '' %>">
+        <i class="bi bi-patch-question d-block"></i>
+        <small>Question</small>
+      </a>
+    </div>
+    <button onclick=""></button>
+  </div>
+</div>
+<script>
+  const user = localStorage.getItem("user");
+  const parsedUser = user ? JSON.parse(user) : null;
+  const auth = document.getElementById("auth");
+
+  if (auth) {
+    if (parsedUser) {
+      auth.innerHTML = `<button onclick="handleLogout()" class="btn btn-danger" href="/auth/logout" >Logout</button>`;
+    } else {
+      auth.innerHTML = `<a class="btn btn-warning" href="/auth">Login</a>`;
+    }
+  }
+  function handleLogout() {
+    console.log("Logout");
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    window.location.href = "/auth";
+  }
+</script>
+<script src="/js/navbar.js"></script>

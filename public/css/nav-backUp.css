@@ -1,0 +1,53 @@
+/* Active State untuk Navbar */
+.navbar .nav-link.active {
+  color: #ffd700 !important;
+  position: relative;
+}
+
+.navbar .nav-link.active::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: #ffd700;
+  border-radius: 3px;
+}
+
+/* Active State untuk Mobile Footer */
+.d-lg-none .text-center.fw-bold {
+  color: #ffd700 !important;
+}
+
+.d-lg-none .text-center.fw-bold i {
+  color: #ffd700 !important;
+}
+.navbar .nav-link:hover:not(.active),
+.d-lg-none .text-center:not(.fw-bold):hover {
+  color: rgba(255, 215, 0, 0.8) !important;
+}
+
+//scroled
+/* Efek Scroll - Navbar jadi putih */
+.navbar.scrolled {
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.navbar.scrolled .nav-link {
+  color: #6a0dad !important; /* ungu gelap agar kontras di putih */
+}
+
+.navbar.scrolled .nav-link.active {
+  color: #f1c40f !important; /* kuning untuk active */
+}
+
+.navbar.scrolled .navbar-brand {
+  color: #6a0dad !important;
+}
+
+.navbar.scrolled .nav-link.active::after {
+  background: #f1c40f;
+}
