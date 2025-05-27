@@ -3,6 +3,7 @@ import * as dashboardModel from "../models/dashboardModel.js";
 export const showDashboard = async (req, res) => {
   try {
     const data = await dashboardModel.getDashboard();
+    const categoryStatus = await dashboardModel.getCategoryStatus();
 
     const summary = {
       positif: data.all.filter((d) => d.sentiment === "positif").length,
@@ -18,6 +19,8 @@ export const showDashboard = async (req, res) => {
       netralData: data.netralData,
       negatifData: data.negatifData,
       summary,
+      activity: data.activity,
+      categoryStatus,
     });
   } catch (error) {
     console.error(error);

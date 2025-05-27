@@ -26,24 +26,24 @@
           <div class="bg-light rounded p-3 shadow-sm">
             <p class="fw-semibold mb-2"><%= (index + 1) + ". " + question.question_text %></p>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" value="Sangat Puas" required />
-              <label class="form-check-label">Sangat Puas</label>
+              <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" id="q<%= question.id %>_5" value="Sangat Puas" required />
+              <label class="form-check-label" for="q<%= question.id %>_5">Sangat Puas</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" value="Puas" required />
-              <label class="form-check-label">Puas</label>
+              <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" id="q<%= question.id %>_4" value="Puas" required />
+              <label class="form-check-label" for="q<%= question.id %>_4">Puas</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" value="Tidak Puas" required />
-              <label class="form-check-label">Netral</label>
+              <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" id="q<%= question.id %>_3" value="Netral" required />
+              <label class="form-check-label" for="q<%= question.id %>_3">Netral</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" value="Tidak Puas" required />
-              <label class="form-check-label">Tidak Puas</label>
+              <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" id="q<%= question.id %>_2" value="Tidak Puas" required />
+              <label class="form-check-label" for="q<%= question.id %>_2">Tidak Puas</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" value="Tidak Puas" required />
-              <label class="form-check-label">Sangat Tidak Puas</label>
+              <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" id="q<%= question.id %>_1" value="Sangat Tidak Puas" required />
+              <label class="form-check-label" for="q<%= question.id %>_1">Sangat Tidak Puas</label>
             </div>
           </div>
         </div>
@@ -59,6 +59,106 @@
 </div>
 
 <script>
+  document.getElementById("formMhs").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    // Validasi apakah semua pertanyaan telah dijawab
+    const unansweredQuestions = [];
+    document.querySelectorAll('[id^="q"]').forEach((group) => {
+      const questionId = group.name.match(/\[(.*?)\]/)[1];
+      if (!document.querySelector(`input[name="${group.name}"]:checked`)) {
+        unansweredQuestions.push(questionId);
+      }
+    });
+
+    if (unansweredQuestions.length > 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Form Tidak Lengkap",
+        text: "Silakan jawab semua pertanyaan sebelum submit.",
+      });
+      return;
+    }
+
+    // Ambil nilai input data mahasiswa
+    const nama = document.getElementById("nama").value;
+    const email = document.getElementById("email").value;
+    const nim = document.getElementById("nim").value;
+
+    // Validasi email
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      Swal.fire({
+        icon: "error",
+        title: "Email Tidak Valid",
+        text: "Silakan masukkan alamat email yang valid.",
+      });
+      return;
+    }
+
+    // Ambil nilai dari setiap pertanyaan
+    const answers = {};
+    const radioButtons = document.querySelectorAll('input[type="radio"]:checked');
+
+    radioButtons.forEach((radioButton) => {
+      const questionId = radioButton.name.match(/\[(.*?)\]/)[1];
+      answers[questionId] = radioButton.value;
+    });
+
+    const formQuesioner = {
+      nama: nama,
+      email: email,
+      nim: nim,
+      answers: answers,
+    };
+
+    try {
+      const response = await fetch("/form/submitForm", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formQuesioner),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil Submit!",
+          text: "Terima kasih atas partisipasinya.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+
+        // generate signature
+        const sigRes = await fetch("/form/generate-signature", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nama, email, nim }),
+        });
+
+        const { signature } = await sigRes.json();
+
+        window.location.href = `/form/sentimenUser?nama=${encodeURIComponent(nama)}&email=${encodeURIComponent(email)}&nim=${encodeURIComponent(nim)}&sig=${signature}`;
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal Submit",
+          text: result.message || "Terjadi kesalahan.",
+        });
+      }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Kesalahan Server",
+        text: error.message || "Gagal terhubung ke server.",
+      });
+    }
+  });
+</script>
+
+<!-- <script>
   document.getElementById("formMhs").addEventListener("submit", async function (event) {
     event.preventDefault();
 
@@ -125,4 +225,4 @@
       });
     }
   });
-</script>
+</script> -->

@@ -1,5 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime.js";
+dayjs.extend(relativeTime);
 
 export const getDashboard = async () => {
   try {
@@ -34,12 +37,39 @@ export const getDashboard = async () => {
       negatifData.push(((kategoriMap[kategori].negatif / total) * 100).toFixed(2));
     });
 
+    //activity terbaru
+    const latestQuestions = await prisma.question.findMany({
+      orderBy: { created_at: "desc" },
+      take: 5,
+    });
+
+    const latestAnswers = await prisma.answer.findMany({
+      orderBy: { created_at: "desc" },
+      take: 5,
+    });
+
+    // Format aktivitas
+    const formattedLatestQuestions = latestQuestions.map((q) => ({
+      text: "Pertanyaan Baru di Tambahkan",
+      time: dayjs(q.created_at).fromNow(),
+      createdAt: q.created_at,
+    }));
+
+    const formattedLatestAnswers = latestAnswers.map((a) => ({
+      text: "Jawaban Baru di Terima",
+      time: dayjs(a.created_at).fromNow(),
+      createdAt: a.created_at,
+    }));
+
+    const activity = [...formattedLatestQuestions, ...formattedLatestAnswers].sort((a, b) => b.createdAt - a.createdAt).slice(0, 5);
+
     return {
       all: data, // ← tambahkan ini
       labels,
       positifData,
       netralData,
       negatifData,
+      activity,
     };
   } catch (error) {
     console.error("Gagal mengambil data dashboard:", error);
@@ -47,39 +77,33 @@ export const getDashboard = async () => {
   }
 };
 
-//verssi pertama
-// export const getDashboard = async () => {
-//   try {
-//     const questions = await prisma.question.findMany({
-//       include: {
-//         answer: true,
-//       },
-//     });
 
-//     const labels = [];
-//     const positifData = [];
-//     const netralData = [];
-//     const negatifData = [];
+//category status
+export const getCategoryStatus = async () => {
+  const categories = await prisma.question.findMany({
+    select: { question_category: true },
+    distinct: ["question_category"],
+  });
 
-//     for (const question of questions) {
-//       labels.push(question.question_text);
-//       const total = question.answer.length || 1;
+  const statusData = await Promise.all(
+    categories.map(async ({ question_category }) => {
+      const total = await prisma.answer.count({
+        where: {
+          question: { question_category },
+        },
+      });
 
-//       const positif = question.answer.filter((a) => a.sentiment === "positif").length;
-//       const netral = question.answer.filter((a) => a.sentiment === "netral").length;
-//       const negatif = question.answer.filter((a) => a.sentiment === "negatif").length;
+      let status = "Tertunda";
+      if (total >= 30) status = "Selesai";
+      else if (total >= 10) status = "Diproses";
 
-//       positifData.push(((positif / total) * 100).toFixed(1));
-//       netralData.push(((netral / total) * 100).toFixed(1));
-//       negatifData.push(((negatif / total) * 100).toFixed(1));
-//     }
-//     return {
-//       labels,
-//       positifData,
-//       netralData,
-//       negatifData,
-//     };
-//   } catch (error) {
-//     console.error("Error fetching dashboard data:", error);
-//   }
-// };
+      return {
+        kategori: question_category,
+        responden: total,
+        status,
+      };
+    })
+  );
+
+  return statusData;
+};

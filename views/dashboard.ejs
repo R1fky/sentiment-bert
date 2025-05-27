@@ -87,9 +87,9 @@
       <div class="card shadow-sm p-3">
         <h5 class="section-title">Aktivitas Terbaru</h5>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Task Updated - <small>40 min ago</small></li>
-          <li class="list-group-item">Jawaban Baru - <small>1 jam lalu</small></li>
-          <li class="list-group-item">Feedback Dipublikasikan - <small>3 jam lalu</small></li>
+          <% activity.forEach(item => { %>
+          <li class="list-group-item"><%= item.text %> - <small><%= item.time %></small></li>
+          <% }) %>
         </ul>
       </div>
     </div>
@@ -105,21 +105,21 @@
             </tr>
           </thead>
           <tbody>
+            <% categoryStatus.forEach((item) => { %>
             <tr>
-              <td>Pelayanan</td>
-              <td>30</td>
-              <td><span class="badge bg-success">Selesai</span></td>
+              <td><%= item.kategori %></td>
+              <td><%= item.responden %></td>
+              <td>
+                <% if (item.status === "Selesai") { %>
+                <span class="badge bg-success">Selesai</span>
+                <% } else if (item.status === "Diproses") { %>
+                <span class="badge bg-warning text-dark">Diproses</span>
+                <% } else { %>
+                <span class="badge bg-danger">Tertunda</span>
+                <% } %>
+              </td>
             </tr>
-            <tr>
-              <td>Akademik</td>
-              <td>45</td>
-              <td><span class="badge bg-warning text-dark">Diproses</span></td>
-            </tr>
-            <tr>
-              <td>Fasilitas</td>
-              <td>25</td>
-              <td><span class="badge bg-danger">Tertunda</span></td>
-            </tr>
+            <% }) %>
           </tbody>
         </table>
       </div>
