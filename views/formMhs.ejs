@@ -1,9 +1,10 @@
-<div class="container my-5">
+<div class="container my-4">
+  <div class="bg-white p-6 rounded-xl shadow-md mb-6">
+    <h2 class="dashboard-header text-2xl font-bold text-gray-800">Form Kuesioner Mahasiswa</h2>
+  </div>
   <div class="card shadow-lg border-0">
     <div class="card-body p-4">
-      <h2 class="mb-4 text-center text-warning"><i class="fas fa-edit me-2"></i>Form Kuesioner Mahasiswa</h2>
-
-      <form id="formMhs">
+      <form id="formMhs" class="opacity-0 translate-y-4 transition-all duration-700 ease-out">
         <!-- Data Mahasiswa -->
         <div class="row mb-4">
           <div class="col-md-4">
@@ -23,7 +24,7 @@
         <!-- Pertanyaan Kuesioner -->
         <% questions.forEach((question, index) => { %>
         <div class="mb-4">
-          <div class="bg-light rounded p-3 shadow-sm">
+          <div class="bg-light rounded p-3 shadow-sm hover:shadow-md transition-all duration-300">
             <p class="fw-semibold mb-2"><%= (index + 1) + ". " + question.question_text %></p>
             <div class="form-check">
               <input class="form-check-input" type="radio" name="answers[<%= question.id %>]" id="q<%= question.id %>_5" value="Sangat Puas" required />
@@ -50,8 +51,8 @@
         <% }) %>
 
         <!-- Tombol Submit -->
-        <div class="text-center">
-          <button type="submit" class="btn btn-warning px-4 py-2 fw-semibold"><i class="fas fa-paper-plane me-1"></i> Submit Kuesioner</button>
+        <div class="flex justify-end mt-4">
+          <button type="submit" class="btn btn-warning px-4 py-2 fw-semibold transition transform hover:scale-105 duration-300"><i class="fas fa-paper-plane me-1"></i> Submit Kuesioner</button>
         </div>
       </form>
     </div>
@@ -156,73 +157,11 @@
       });
     }
   });
-</script>
 
-<!-- <script>
-  document.getElementById("formMhs").addEventListener("submit", async function (event) {
-    event.preventDefault();
-
-    // Ambil nilai input data mahasiswa
-    const nama = document.getElementById("nama").value;
-    const email = document.getElementById("email").value;
-    const nim = document.getElementById("nim").value;
-
-    // Ambil nilai dari setiap pertanyaan
-    const answers = {};
-    const radioButtons = document.querySelectorAll('input[type="radio"]:checked');
-
-    radioButtons.forEach((radioButton) => {
-      const questionId = radioButton.name.match(/\[(.*?)\]/)[1]; // Ambil question_id dari name="answers[question_id]"
-      answers[questionId] = radioButton.value;
-    });
-
-    const formQuesioner = {
-      nama: nama,
-      email: email,
-      nim: nim,
-      answers: answers,
-    };
-    try {
-      const response = await fetch("/form/submitForm", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formQuesioner),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Berhasil Submit!",
-          text: "Terima kasih atas partisipasinya.",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-        // generate signature
-        const sigRes = await fetch("/form/generate-signature", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nama, email, nim }),
-        });
-        const { signature } = await sigRes.json();
-
-        window.location.href = `/form/sentimenUser?nama=${encodeURIComponent(nama)}&email=${encodeURIComponent(email)}&nim=${encodeURIComponent(nim)}&sig=${signature}`;
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Gagal Submit",
-          text: result.message || "Terjadi kesalahan.",
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Kesalahan Server",
-        text: error.message || "Gagal terhubung ke server.",
-      });
-    }
+  // Animasi form muncul
+  window.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("formMhs");
+    form.classList.remove("opacity-0", "translate-y-4");
+    form.classList.add("opacity-100", "translate-y-0");
   });
-</script> -->
+</script>

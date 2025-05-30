@@ -1,0 +1,55 @@
+body {
+  background: #f4f6fa;
+  font-family: "Segoe UI", sans-serif;
+}
+.dashboard-header {
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+.card-box {
+  border-radius: 15px;
+  padding: 20px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+.card-icon {
+  font-size: 1.8rem;
+  opacity: 0.7;
+}
+.info-box {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.section-title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+.card-box {
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-box:hover {
+  transform: translateY(-6px) scale(1.02);
+}
+
+.scroll-animate.show {
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+}
+
+.activity-list li.show,
+.table-rows tr.show {
+  transform: translateX(0) !important;
+  transform: translateY(0) !important;
+  opacity: 1 !important;
+}

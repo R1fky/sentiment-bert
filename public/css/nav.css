@@ -15,3 +15,58 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+ .modern-sidebar {
+    width: 240px;
+    background: #fff;
+    border-right: 1px solid #e0e0e0;
+    font-family: "Segoe UI", sans-serif;
+  }
+
+  .modern-sidebar .nav-link {
+    color: #555;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+  }
+
+  .modern-sidebar .nav-link:hover {
+    background-color: #f0f0f5;
+    color: #000;
+  }
+
+  .modern-sidebar .nav-link.active {
+    background-color: #6a0dad;
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .modern-sidebar .navbar-brand {
+    font-size: 1.25rem;
+    color: #6a0dad;
+  }
+
+  .modern-mobile-nav,
+  .modern-bottom-nav {
+    background: #fff;
+    border-bottom: 1px solid #e0e0e0;
+    font-family: "Segoe UI", sans-serif;
+  }
+
+  .modern-bottom-nav {
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .modern-bottom-nav a {
+    color: #555;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+  }
+
+  .modern-bottom-nav a.fw-bold {
+    color: #6a0dad;
+  }
+
+  .bi {
+    font-size: 1.2rem;
+  }

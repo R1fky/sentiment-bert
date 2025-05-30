@@ -9,7 +9,8 @@
     "dev": "nodemon server.js",
     "seed": "node prisma/seed.js",
     "seedAnswers": "node prisma/importAnswer.js",
-    "resetDb": "node prisma/resetDatabase.js"
+    "resetDb": "node prisma/resetDatabase.js",
+    "answers" : "node prisma/answers.js"
   },
   "keywords": [],
   "author": "",

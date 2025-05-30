@@ -1,4 +1,4 @@
-<div class="container-fluid py-4" style="background-color: #f4f6fa; min-height: 100vh;">
+<div class="container-fluid py-4" style="background-color: #f4f6fa; min-height: 100vh">
   <div class="row justify-content-center">
     <!-- Blok Utama -->
     <div class="col-lg-10">
@@ -30,10 +30,7 @@
                       <td><%= item.question?.question_text || "?" %></td>
                       <td><%= item.answer_text %></td>
                       <td>
-                        <span class="badge 
-                          <%= item.sentiment === 'positif' ? 'bg-success' : item.sentiment === 'netral' ? 'bg-warning text-dark' : 'bg-danger' %>">
-                          <%= item.sentiment %>
-                        </span>
+                        <span class="badge <%= item.sentiment === 'positif' ? 'bg-success' : item.sentiment === 'netral' ? 'bg-warning text-dark' : 'bg-danger' %>"> <%= item.sentiment %> </span>
                       </td>
                     </tr>
                     <% }) %>
@@ -47,21 +44,16 @@
         <!-- Blok Profil -->
         <div class="col-md-4">
           <div class="card text-center shadow-sm border-0 p-4">
-            
+            <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(data[0]?.nama || 'User') %>&background=random" class="rounded-circle mx-auto mb-3" width="80" height="80" alt="Avatar" />
+
             <h5 class="mb-1"><%= data[0]?.nama || "Tidak Diketahui" %></h5>
             <p class="text-muted mb-3">Mahasiswa</p>
-            <hr>
+            <hr />
             <h6 class="mb-3">Ringkasan Sentimen</h6>
             <ul class="list-group text-start shadow-sm">
-              <li class="list-group-item d-flex justify-content-between">
-                <span>Positif</span><span><%= sentimentCounts.positif %></span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span>Netral</span><span><%= sentimentCounts.netral %></span>
-              </li>
-              <li class="list-group-item d-flex justify-content-between">
-                <span>Negatif</span><span><%= sentimentCounts.negatif %></span>
-              </li>
+              <li class="list-group-item d-flex justify-content-between"><span>Positif</span><span><%= sentimentCounts.positif %></span></li>
+              <li class="list-group-item d-flex justify-content-between"><span>Netral</span><span><%= sentimentCounts.netral %></span></li>
+              <li class="list-group-item d-flex justify-content-between"><span>Negatif</span><span><%= sentimentCounts.negatif %></span></li>
             </ul>
           </div>
         </div>

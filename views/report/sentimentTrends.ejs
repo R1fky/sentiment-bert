@@ -1,0 +1,109 @@
+<style>
+  :root {
+    --primary-color: #7366ff;
+    --secondary-color: #f8f9fa;
+    --success-color: #00c853;
+    --danger-color: #ff6b6b;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+  }
+
+  body {
+    background-color: #f5f7fb;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .card {
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+    background-color: #fff;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+  }
+
+  .stat-title {
+    color: #6c757d;
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+  }
+
+  .chart-title {
+    font-weight: 600;
+    font-size: 18px;
+  }
+</style>
+
+<div class="container py-4">
+  <div class="mb-4">
+    <h2 class="fw-bold">📈 Tren Sentimen Mahasiswa</h2>
+    <p class="text-muted">Distribusi sentimen berdasarkan bulan</p>
+  </div>
+
+  <!-- Chart Card -->
+  <div class="card p-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="chart-title">Distribusi Sentimen Bulanan</h5>
+      <select class="form-select form-select-sm" style="width: 150px">
+        <option selected>Tahun Ini</option>
+        <option>Tahun Lalu</option>
+      </select>
+    </div>
+    <canvas id="sentimentTrendChart" height="100"></canvas>
+  </div>
+</div>
+
+<!-- Chart.js Script -->
+<script>
+  const ctx = document.getElementById('sentimentTrendChart').getContext('2d');
+  const sentimentChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: <%- labels %>,
+      datasets: [
+        {
+          label: 'Positif',
+          data: <%- positifData %>,
+          borderColor: 'rgba(99, 102, 241, 1)',
+          backgroundColor: 'rgba(99, 102, 241, 0.2)',
+          tension: 0.3
+        },
+        {
+          label: 'Netral',
+          data: <%- netralData %>,
+          borderColor: 'rgba(147, 197, 253, 1)',
+          backgroundColor: 'rgba(147, 197, 253, 0.2)',
+          tension: 0.3
+        },
+        {
+          label: 'Negatif',
+          data: <%- negatifData %>,
+          borderColor: 'rgba(248, 113, 113, 1)',
+          backgroundColor: 'rgba(248, 113, 113, 0.2)',
+          tension: 0.3
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Jumlah Responden'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: 'Bulan'
+          }
+        }
+      }
+    }
+  });
+</script>
