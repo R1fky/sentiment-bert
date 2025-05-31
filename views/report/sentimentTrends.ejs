@@ -44,8 +44,8 @@
           <div class="d-flex align-items-center gap-2">
             <label for="year-select" class="fw-semibold text-muted small mb-0">📅 Filter Tahun:</label>
             <select id="year-select" class="form-select form-select-sm w-auto border rounded-pill px-3 py-2 shadow-sm text-muted">
-              <option selected>Tahun Ini</option>
-              <option>Tahun Lalu</option>
+              <option value="current" <%= selectedYear === currentYear ? "selected" : "" %>>Tahun Ini</option>
+              <option value="last" <%= selectedYear === currentYear - 1 ? "selected" : "" %>>Tahun Lalu</option>
             </select>
           </div>
         </div>
@@ -152,5 +152,10 @@
         }
       });
     }
+  });
+
+  document.getElementById('year-select').addEventListener('change', function() {
+    const selectedValue = this.value; // "current" atau "last"
+    window.location.href = `/report/sentiment-trends?year=${selectedValue}`;
   });
 </script>

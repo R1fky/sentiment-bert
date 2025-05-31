@@ -1,11 +1,6 @@
 const userString = localStorage.getItem("user");
-console.log("userString:", userString);
-
 const parsedUser = userString ? JSON.parse(userString) : null;
-console.log("parsedUser:", parsedUser);
-
 const token = localStorage.getItem("token");
-console.log("token:", token);
 
 const auth = document.getElementById("auth"); // Sidebar desktop
 const mobileAuth = document.getElementById("mobile-auth"); // Navbar mobile

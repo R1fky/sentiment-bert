@@ -15,3 +15,26 @@ export const getSentimentTrends = async () => {
     console.error("Cannot Select", error);
   }
 };
+
+export const getSentimentTrendsByYear = async (year) => {
+  try {
+    const start = new Date(`${year}-01-01`);
+    const end = new Date(`${year + 1}-01-01`);
+    const answers = await prisma.answer.findMany({
+      where: {
+        created_at: {
+          gte: start,
+          lt: end,
+        },
+      },
+      include: {
+        question: true,
+        user: true,
+      },
+    });
+    return answers;
+  } catch (error) {
+    console.error("Cannot Select", error);
+    return [];
+  }
+};
