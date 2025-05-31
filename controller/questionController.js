@@ -5,7 +5,7 @@ export const showQuestion = async (req, res) => {
     const questions = await questionModel.getQuestion();
     const questions_category = await questionModel.getAllCategories();
     res.render("question", {
-      title: "Question Page",
+      title: "Question",
       layout: "layouts/main",
       questions,
       questions_category,
@@ -37,11 +37,6 @@ export const createQuestion = async (req, res) => {
         message: "Invalid input format",
       });
     }
-    // const questionsToAdd = question_text.map((text, index) => ({
-    //   question_text: text,
-    //   question_type: answer_type[index] || "radio",
-    //   question_category: category[index],
-    // }));
 
     // debug
     const questionsToAdd = question_text.map((text, index) => {

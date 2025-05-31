@@ -1,7 +1,7 @@
-import express from "express";
-import * as adminReportController from "../controller/reportController.js";
-const router = express.Router();
+    import express from "express";
+    import * as adminReportController from "../controller/reportController.js";
+    const router = express.Router();
 
-router.get("/sentiment-trends", adminReportController.getTrends);
+    router.get("/", adminReportController.getTrends);
 
-export default router;
+    export default router;

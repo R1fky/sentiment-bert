@@ -12,7 +12,7 @@ export const showDashboard = async (req, res) => {
     };
 
     res.render("dashboard", {
-      title: "Dashboard Page",
+      title: "Dashboard",
       layout: "layouts/main",
       labels: data.labels,
       positifData: data.positifData,
