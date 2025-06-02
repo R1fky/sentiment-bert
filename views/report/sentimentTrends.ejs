@@ -7,7 +7,7 @@
   </div>
 
   <div class="bg-white p-6 rounded-xl shadow-md mb-6">
-    <h2 class="dashboard-header text-2xl font-bold text-gray-800">📊 Trends Sentimen</h2>
+    <h2 class="dashboard-header text-2xl font-bold text-gray-800"><i class="bi bi-graph-up me-2"></i> Trends Sentimen</h2>
     <p class="text-muted-sm">Distribusi sentimen bulanan terhadap layanan akademik</p>
   </div>
 
@@ -43,10 +43,6 @@
           <h5 class="fw-semibold text-dark">Distribusi Sentimen Bulanan</h5>
           <div class="d-flex align-items-center gap-2">
             <label for="year-select" class="fw-semibold text-muted small mb-0">📅 Filter Tahun:</label>
-            <select id="year-select" class="form-select form-select-sm w-auto border rounded-pill px-3 py-2 shadow-sm text-muted">
-              <option value="current" <%= selectedYear === currentYear ? "selected" : "" %>>Tahun Ini</option>
-              <option value="last" <%= selectedYear === currentYear - 1 ? "selected" : "" %>>Tahun Lalu</option>
-            </select>
           </div>
         </div>
         <canvas id="sentimentTrendChart" height="140"></canvas>

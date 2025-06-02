@@ -1,15 +1,41 @@
-<section class="hero d-flex align-items-center text-center bg-light" style="min-height: 100vh; padding-top: 100px">
-  <div class="container">
-    <h1 class="display-4 fw-bold">Analisis Sentimen Kepuasan Mahasiswa</h1>
-    <p class="lead mt-3 mb-4">Sistem ini digunakan untuk menganalisis tanggapan mahasiswa terhadap layanan akademik di Politeknik Negeri Lhokseumawe.</p>
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+<style>
+  .hero {
+    background: linear-gradient(135deg, #f8f9fa, #fff);
+    transition: all 0.9s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.7s ease;
+  }
+
+  .btn-warning {
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .btn-warning:hover {
+    background-color: #e0a800;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+</style>
+
+<section
+  class="hero d-flex align-items-center text-center text-white"
+  style="min-height: 100vh; padding-top: 100px; background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/image/background-homePage.png') center/cover no-repeat"
+>
+  <div class="container" data-aos="fade-up">
+    <h1 class="display-4 fw-bold mb-3">Analisis Sentimen Kepuasan Mahasiswa</h1>
+    <p class="lead mb-4">Sistem ini digunakan untuk menganalisis tanggapan mahasiswa terhadap layanan akademik di Politeknik Negeri Lhokseumawe.</p>
     <a href="/form" class="btn btn-warning btn-lg px-4">Isi Kuesioner</a>
   </div>
 </section>
+
 <section class="py-5 bg-white text-center">
   <div class="container">
-    <h2 class="mb-4">Fitur Sistem</h2>
+    <h2 class="fw-bold display-6 mb-5" data-aos="fade-up">Fitur Sistem</h2>
     <div class="row g-4">
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
         <div class="card shadow border-0 h-100">
           <div class="card-body">
             <h5 class="card-title">Input Kuesioner</h5>
@@ -17,7 +43,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
         <div class="card shadow border-0 h-100">
           <div class="card-body">
             <h5 class="card-title">Analisis Sentimen</h5>
@@ -25,7 +51,7 @@
           </div>
         </div>
       </div>
-      <div class="col-md-4">
+      <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
         <div class="card shadow border-0 h-100">
           <div class="card-body">
             <h5 class="card-title">Laporan Hasil</h5>
@@ -38,11 +64,20 @@
 </section>
 
 <section class="py-5 bg-light text-center">
-  <div class="container">
-    <h2 class="mb-4">Tentang Model BERT</h2>
+  <div class="container" data-aos="fade-up">
+    <h2 class="fw-bold display-6 mb-4" data-aos="fade-up">Tentang Model BERT</h2>
     <p class="lead mx-auto" style="max-width: 700px">
       BERT (Bidirectional Encoder Representations from Transformers) adalah model bahasa berbasis transformer yang dikembangkan oleh Google. Model ini mampu memahami konteks kata dalam kalimat secara dua arah, sehingga sangat efektif dalam
       berbagai tugas pemrosesan bahasa alami, termasuk analisis sentimen. Dalam sistem ini, BERT digunakan untuk mengklasifikasikan opini mahasiswa menjadi sentimen positif, negatif, atau netral.
     </p>
   </div>
 </section>
+
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000, // durasi animasi dalam milidetik (default 400)
+    easing: "ease-in-out", // transisi lebih halus
+    once: true, // animasi hanya terjadi sekali saat scroll
+  });
+</script>

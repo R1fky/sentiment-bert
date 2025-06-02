@@ -1,5 +1,6 @@
 import * as sentimentReport from "../models/reportModel.js";
 
+
 export const getTrends = async (req, res) => {
   try {
     const result = await sentimentReport.getSentimentTrends();
@@ -55,23 +56,13 @@ export const getTrends = async (req, res) => {
       layout: "layouts/main",
     });
 
-    console.log("Labels:", labels), console.log("Positif:", positifData), console.log("Netral:", netralData), console.log("Negatif:", negatifData);
   } catch (error) {
     throw new Error("Database error: " + error.message);
   }
 };
 
-export const sentimentTrends = async (req, res) => {
-  try {
-    const year = parseInt(req.query.year) || new Date().getFullYear();
 
-    const answers = await sentimentReport.getSentimentTrendsByYear(year);
-    
-  } catch(error) {
-    console.log("Error fetching sentiment trends:", error);
-    res.status(500).json({
-      error: "Internal Server Error",
-      message: error.message,
-    })
-  }
-};
+
+
+
+
