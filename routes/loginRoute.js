@@ -6,7 +6,7 @@ const router = express.Router()
 router.get('/', (req, res) => {
   res.render('login', {
     title: 'Login Admin',
-    layout: 'layouts/main',
+    layout: 'layouts/login-main',
   })
 })
 router.post('/login', loginController.login)

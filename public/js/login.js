@@ -1,8 +1,6 @@
 document.getElementById("loginUser").addEventListener("submit", async function (event) {
   event.preventDefault();
 
-  const spinner = document.getElementById("loadingSpinner");
-
   const formLogin = {
     username: document.getElementById("username").value,
     password: document.getElementById("password").value,
@@ -29,7 +27,7 @@ document.getElementById("loginUser").addEventListener("submit", async function (
     const result = await response.json();
 
     if (result.success) {
-      Swal.close()
+      Swal.close();
       Swal.fire({
         icon: "success",
         title: "Login Berhasil",
@@ -47,7 +45,7 @@ document.getElementById("loginUser").addEventListener("submit", async function (
         window.location.href = "/"; // Reload the page after success
       });
     } else {
-      Swal.close()
+      Swal.close();
       Swal.fire({
         icon: "error",
         title: "Login Anda Gagal",
@@ -57,7 +55,7 @@ document.getElementById("loginUser").addEventListener("submit", async function (
       });
     }
   } catch (error) {
-    Swal.close()
+    Swal.close();
     Swal.fire({
       icon: "error",
       title: "Failed to Login",

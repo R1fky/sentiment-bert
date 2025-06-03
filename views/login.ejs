@@ -1,21 +1,169 @@
-<link rel="stylesheet" href="/css/login.css" />
-<div class="login-container">
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: "Segoe UI", sans-serif;
+    background: linear-gradient(120deg, #fff 50%, #ffc107 50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .login-wrapper {
+    width: 90%;
+    max-width: 900px;
+    height: 500px;
+    display: flex;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: white;
+  }
+
+  .login-left,
+  .login-right {
+    flex: 1;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .login-left {
+    background-color: white;
+    text-align: center;
+    align-items: center; /* untuk posisi horizontal tengah */
+  }
+
+  .login-left img {
+    max-width: 120px;
+    margin-bottom: 1rem;
+  }
+
+  .login-left h3 {
+    font-weight: bold;
+    color: #ffc107;
+  }
+
+  .login-right {
+    background-color: #ffc107;
+    color: white;
+  }
+
+  @media (max-width: 768px) {
+    .login-right {
+      clip-path: none;
+    }
+  }
+
+  .login-right label {
+    color: white;
+    font-weight: 500;
+  }
+
+  .login-right input {
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+  }
+
+  .btn-login {
+    background-color: #fff;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .btn-login::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 193, 7, 0.2);
+    transition: all 0.6s ease;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: 0;
+  }
+
+  .btn-login:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.6), 0 0 20px rgba(255, 255, 255, 0.5), 0 8px 30px rgba(255, 255, 255, 0.4);
+  }
+
+  .btn-login:active::before {
+    transform: translate(-50%, -50%) scale(1);
+    transition: 0s;
+  }
+
+  @media (max-width: 768px) {
+    .login-wrapper {
+      flex-direction: column;
+      height: auto;
+    }
+
+    .login-left,
+    .login-right {
+      padding: 2rem 1.5rem;
+    }
+  }
+
+  @keyframes fadeSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .login-left,
+  .login-right form {
+    animation: fadeSlideIn 0.8s ease forwards;
+    opacity: 0;
+  }
+
+  .login-left {
+    animation-delay: 0.2s;
+  }
+
+  .login-right form {
+    animation-delay: 0.4s;
+  }
+</style>
+
+<div class="login-wrapper">
   <div class="login-left">
-    <img src="https://cdni.iconscout.com/illustration/premium/thumb/login-authentication-4488953-3723270.png" class="img-fluid" alt="Login Illustration" />
+    <img src="/image/logo/pnlLogo.jfif" alt="PNL Logo" />
+    <h3>PNL SENTIMEN</h3>
+    <p class="text-muted">Menganalisis kepuasan mahasiswa secara cerdas</p>
   </div>
   <div class="login-right">
-    <div class="text-end"></div>
-    <h2 class="fw-bold mt-4">Welcome to PNL Sentimen!</h2>
     <form id="loginUser">
       <div class="mb-3">
-        <label for="email" class="form-label">Email</label>
-        <input type="email" class="form-control" id="username" name="username" required />
+        <label for="username" class="form-label">Your email</label>
+        <input type="email" class="form-control" id="username" name="username" required placeholder="Enter your email" />
       </div>
-      <div class="mb-4">
+      <div class="mb-3">
         <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" name="password" required />
+        <input type="password" class="form-control" id="password" name="password" required placeholder="Enter your password" />
       </div>
-      <button type="submit" class="btn btn-login w-100">Login</button>
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="remember" />
+          <label class="form-check-label" for="remember">Remember me</label>
+        </div>
+        <a href="#" class="text-white text-decoration-underline">Forgot password?</a>
+      </div>
+      <button type="submit" class="btn btn-login w-100 py-2">SIGN IN</button>
     </form>
     <!-- loading spinner -->
     <div id="loadingSpinner" class="hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
@@ -29,14 +177,5 @@
         <p class="text-white text-lg font-semibold animate-pulse">Memproses jawaban...</p>
       </div>
     </div>
-    <div class="text-center mt-4">
-      <small>Login account with</small>
-      <div class="social-login">
-        <i class="bi bi-facebook"></i>
-        <i class="bi bi-linkedin"></i>
-        <i class="bi bi-google"></i>
-      </div>
-    </div>
   </div>
 </div>
-<script src="/js/login.js"></script>
