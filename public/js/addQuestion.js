@@ -1,6 +1,6 @@
 const isLogin = localStorage.getItem("user");
-const token = localStorage.getItem("token");
-if (!isLogin || !token) {
+window.token = localStorage.getItem("token");
+if (!isLogin || !window.token) {
   window.location.href = "/"; // Redirect to login page
 }
 let questionCount = 1;
@@ -73,7 +73,7 @@ document.getElementById("addQuestionform").addEventListener("submit", async func
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${window.token}`,
       },
       body: JSON.stringify(addForm),
     });

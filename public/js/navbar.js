@@ -1,12 +1,13 @@
 const userString = localStorage.getItem("user");
 const parsedUser = userString ? JSON.parse(userString) : null;
-const token = localStorage.getItem("token");
+// const token = localStorage.getItem("token");
+window.token = localStorage.getItem("token");
 
 const auth = document.getElementById("auth"); // Sidebar desktop
 const mobileAuth = document.getElementById("mobile-auth"); // Navbar mobile
 
 // Sembunyikan menu untuk non-admin
-if (!parsedUser || parsedUser.role !== "ADMIN" || !token) {
+if (!parsedUser || parsedUser.role !== "ADMIN" || !window.token) {
   const sentimentMenus = document.querySelectorAll("a[href='/report']");
   sentimentMenus.forEach((menu) => {
     menu.style.display = "none";
@@ -48,6 +49,6 @@ document.addEventListener("click", function (e) {
     e.preventDefault();
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    window.location.href = "/auth";
+    window.location.href = "/";
   }
 });
