@@ -1,44 +1,74 @@
-<div class="container my-5">
-  <div class="card border-0 shadow-lg rounded-4">
-    <div class="card-body px-5 py-4">
-      <h2 class="text-center text-gradient mb-4"><i class="fas fa-clipboard-list me-2 text-primary"></i>Tambah Pertanyaan Kuesioner</h2>
+<style>
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 
-      <form id="addQuestionform">
-        <div id="questionContainer">
-          <!-- Pertanyaan pertama -->
-          <div class="question-block mb-4 p-4 border rounded-3 bg-light shadow-sm">
-            <h5 class="mb-3 text-secondary"><i class="fas fa-question-circle me-2 text-warning"></i>Pertanyaan 1</h5>
+  @keyframes scaleIn {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 
-            <!-- Input Teks Pertanyaan -->
-            <div class="mb-3">
-              <label class="form-label fw-bold">Teks Pertanyaan</label>
-              <input type="text" class="form-control" name="question_text[]" placeholder="Masukkan pertanyaan..." required />
-            </div>
+  .fade-slide-in {
+    animation: fadeSlideIn 0.6s ease-out;
+  }
 
-            <!-- Pilih Kategori Pertanyaan -->
-            <div class="mb-3">
-              <label class="form-label fw-bold">Kategori Pertanyaan</label>
-              <select class="form-select" name="question_category[]" required>
-                <option disabled selected value="">-- Pilih Kategori --</option>
-                <option value="Metode Pembelajaran">Metode Pembelajaran</option>
-                <option value="Proses Pembelajaran">Proses Pembelajaran</option>
-                <option value="Fasilitas dan Sarana">Fasilitas dan Sarana</option>
-              </select>
-            </div>
+  .scale-in {
+    animation: scaleIn 0.3s ease-out;
+  }
+</style>
 
-            <!-- Tipe Jawaban (tetap radio untuk skala kepuasan) -->
-            <input type="hidden" name="answer_type[]" value="radio" />
-            <p class="text-muted small fst-italic">Tipe jawaban: Skala kepuasan (Sangat Puas → Sangat Tidak Puas)</p>
+<div class="container my-5 fade-slide-in">
+  <div class="bg-white rounded-3 shadow-lg p-6 md:p-10">
+    <h2 class="text-center text-2xl md:text-3xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-yellow-500 to-orange-500"><i class="fas fa-clipboard-list me-2 text-primary"></i> Tambah Pertanyaan Kuesioner</h2>
+
+    <form id="addQuestionform" class="space-y-6">
+      <div id="questionContainer" class="space-y-6">
+        <!-- Pertanyaan pertama -->
+        <div class="question-block rounded-xl border border-gray-200 bg-gray-50 shadow-sm p-5">
+          <h5 class="mb-4 font-semibold text-gray-600 flex items-center gap-2"><i class="fas fa-question-circle text-yellow-500"></i> Pertanyaan 1</h5>
+
+          <!-- Input Teks Pertanyaan -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Teks Pertanyaan</label>
+            <input type="text" name="question_text[]" required placeholder="Masukkan pertanyaan..." class="form-control rounded-md focus:ring-2 focus:ring-yellow-400" />
           </div>
-        </div>
 
-        <!-- Tombol Tambah & Simpan -->
-        <div class="d-flex justify-content-between align-items-center mt-3">
-          <button type="button" class="btn btn-outline-primary fw-semibold" id="addQuestionBtn"><i class="fas fa-plus-circle me-1"></i> Tambah Pertanyaan</button>
-          <button type="submit" class="btn btn-warning fw-semibold px-4 shadow-sm"><i class="fas fa-paper-plane me-1"></i> Simpan Semua</button>
+          <!-- Kategori Pertanyaan -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Kategori Pertanyaan</label>
+            <select name="question_category[]" required class="form-select rounded-md">
+              <option disabled selected value="">-- Pilih Kategori --</option>
+              <option value="Metode Pembelajaran">Metode Pembelajaran</option>
+              <option value="Proses Pembelajaran">Proses Pembelajaran</option>
+              <option value="Fasilitas dan Sarana">Fasilitas dan Sarana</option>
+            </select>
+          </div>
+
+          <!-- Hidden tipe jawaban -->
+          <input type="hidden" name="answer_type[]" value="radio" />
+          <p class="text-sm text-gray-500 italic">Tipe jawaban: Skala kepuasan (Sangat Puas → Sangat Tidak Puas)</p>
         </div>
-      </form>
-    </div>
+      </div>
+
+      <!-- Tombol -->
+      <div class="flex justify-between items-center pt-4">
+        <button type="button" id="addQuestionBtn" class="btn btn-outline-primary px-4 py-2 rounded-md hover:shadow-md transition"><i class="fas fa-plus-circle me-1"></i> Tambah Pertanyaan</button>
+        <button type="submit" class="btn bg-yellow-400 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded-md shadow transition"><i class="fas fa-paper-plane me-1"></i> Simpan Semua</button>
+      </div>
+    </form>
   </div>
 </div>
 

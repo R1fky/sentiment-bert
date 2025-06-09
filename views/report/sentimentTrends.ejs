@@ -43,6 +43,7 @@
           <h5 class="fw-semibold text-dark">Distribusi Sentimen Bulanan</h5>
           <div class="d-flex align-items-center gap-2">
             <label for="year-select" class="fw-semibold text-muted small mb-0">📅 Filter Tahun:</label>
+            
           </div>
         </div>
         <canvas id="sentimentTrendChart" height="140"></canvas>
@@ -83,72 +84,72 @@
     const ctxLine = document.getElementById('sentimentTrendChart')?.getContext('2d');
     const ctxPie = document.getElementById('sentimentPieChart')?.getContext('2d');
 
-    if (ctxLine && ctxPie) {
-      new Chart(ctxLine, {
-        type: 'line',
-        data: {
-          labels: <%- labels %>,
-          datasets: [
-            {
-              label: 'Positif',
-              data: <%- positifData %>,
-              borderColor: '#00c853',
-              backgroundColor: 'rgba(0, 200, 83, 0.1)',
-              tension: 0.4
-            },
-            {
-              label: 'Netral',
-              data: <%- netralData %>,
-              borderColor: '#17a2b8',
-              backgroundColor: 'rgba(23, 162, 184, 0.1)',
-              tension: 0.4
-            },
-            {
-              label: 'Negatif',
-              data: <%- negatifData %>,
-              borderColor: '#ff6b6b',
-              backgroundColor: 'rgba(255, 107, 107, 0.1)',
-              tension: 0.4
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: { display: true, position: 'bottom' }
+      if (ctxLine && ctxPie) {
+        new Chart(ctxLine, {
+          type: 'line',
+          data: {
+            labels: <%- labels %>,
+            datasets: [
+              {
+                label: 'Positif',
+                data: <%- positifData %>,
+                borderColor: '#00c853',
+                backgroundColor: 'rgba(0, 200, 83, 0.1)',
+                tension: 0.4
+              },
+              {
+                label: 'Netral',
+                data: <%- netralData %>,
+                borderColor: '#17a2b8',
+                backgroundColor: 'rgba(23, 162, 184, 0.1)',
+                tension: 0.4
+              },
+              {
+                label: 'Negatif',
+                data: <%- negatifData %>,
+                borderColor: '#ff6b6b',
+                backgroundColor: 'rgba(255, 107, 107, 0.1)',
+                tension: 0.4
+              }
+            ]
           },
-          scales: {
-            y: {
-              beginAtZero: true,
-              title: { display: true, text: 'Jumlah Responden' }
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { display: true, position: 'bottom' }
             },
-            x: {
-              title: { display: true, text: 'Bulan' }
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: { display: true, text: 'Jumlah Responden' }
+              },
+              x: {
+                title: { display: true, text: 'Bulan' }
+              }
             }
           }
-        }
-      });
+        });
 
-      new Chart(ctxPie, {
-        type: 'doughnut',
-        data: {
-          labels: ['Positif', 'Netral', 'Negatif'],
-          datasets: [{
-            data: [<%= positifTotal %>, <%= netralTotal %>, <%= negatifTotal %>],
-            backgroundColor: ['#00c853', '#17a2b8', '#ff6b6b'],
-            hoverOffset: 8
-          }]
-        },
-        options: {
-          responsive: true,
-          cutout: '60%',
-          plugins: {
-            legend: { display: false }
+        new Chart(ctxPie, {
+          type: 'doughnut',
+          data: {
+            labels: ['Positif', 'Netral', 'Negatif'],
+            datasets: [{
+              data: [<%= positifTotal %>, <%= netralTotal %>, <%= negatifTotal %>],
+              backgroundColor: ['#00c853', '#17a2b8', '#ff6b6b'],
+              hoverOffset: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            cutout: '60%',
+            plugins: {
+              legend: { display: false }
+            }
           }
-        }
-      });
-    }
-  });
+        });
+      }
+    });
 
   document.getElementById('year-select').addEventListener('change', function() {
     const selectedValue = this.value; // "current" atau "last"

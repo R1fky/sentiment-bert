@@ -19,7 +19,7 @@ addBtn.addEventListener("click", () => {
 
   // form
   const questionHTML = `
-      <div class="question-block mb-4 p-4 border rounded-3 bg-light shadow-sm">
+      <div class="question-block mb-4 p-4 border rounded-3 bg-light shadow-sm scale-in">
         <h5 class="mb-3 text-secondary">
           <i class="fas fa-question-circle me-2 text-warning"></i>Pertanyaan ${questionCount}
         </h5>
