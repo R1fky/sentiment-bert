@@ -18,7 +18,7 @@ export const submitForm = async (body) => {
         text: answerText,
       });
 
-      const { preprocessed_text, sentiment } = response.data;
+      const { preprocessed, sentiment } = response.data;
 
       await prisma.answer.create({
         data: {
@@ -27,7 +27,7 @@ export const submitForm = async (body) => {
           email,
           nim,
           answer_text: answerText,
-          preProcess_text: preprocessed_text,
+          preProcess_text: preprocessed,
           sentiment: sentiment,
         },
       });
