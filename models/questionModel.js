@@ -31,3 +31,17 @@ export const getAllCategories = async () => {
     select: { question_category: true },
   });
 };
+
+//deleteQuestion
+export const questionDelete = async (dataId) => {
+  try {
+    return await prisma.question.delete({
+      include : {
+        answer :true
+      },
+      where: { id: dataId },
+    });
+  } catch (error) {
+    console.log("Message :", error);
+  }
+};

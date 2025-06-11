@@ -15,4 +15,7 @@ router.get("/add-question", (req, res) => {
 });
 router.post("/question-add", auth.authenticateJWT, questionController.createQuestion);
 
+// delete
+router.get('/delete/:id', questionController.deleteQuestion)
+
 export default router;

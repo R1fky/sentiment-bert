@@ -1,74 +1,4 @@
-<style>
-  body {
-    font-family: "Segoe UI", sans-serif;
-    background-color: #f9f9fb;
-  }
-
-  .page-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: #212529;
-  }
-
-  .btn-custom {
-    border-radius: 0.5rem;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    letter-spacing: 0.3px;
-  }
-
-  .btn-outline-info:hover {
-    background-color: #0dcaf0;
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(13, 202, 240, 0.4);
-  }
-
-  .btn-outline-warning:hover {
-    background-color: #ffc107;
-    color: #000;
-    box-shadow: 0 4px 16px rgba(255, 193, 7, 0.4);
-  }
-
-  .table thead {
-    background-color: #f0f2f5;
-    font-weight: 600;
-    color: #495057;
-  }
-
-  .table tbody tr:hover {
-    background-color: #f8f9fa;
-    transition: background-color 0.2s ease;
-  }
-
-  .dropdown-menu a:hover {
-    background-color: #f1f1f1;
-    font-weight: 500;
-  }
-
-  .table td,
-  .table th {
-    vertical-align: middle !important;
-  }
-
-  .table th {
-    text-align: center;
-  }
-
-  @media (max-width: 576px) {
-    .btn-custom {
-      width: 100%;
-      margin-bottom: 0.5rem;
-    }
-  }
-
-  .table-container {
-    border-radius: 1rem;
-    overflow: hidden;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.05);
-    background: white;
-  }
-</style>
-
+<link rel="stylesheet" href="/css/question.css" />
 <div class="container mt-5">
   <!-- Header -->
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4">
@@ -111,8 +41,11 @@
             <a href="/edit/<%= question.id %>" class="btn btn-sm btn-primary me-2" title="Edit">
               <i class="bi bi-pencil-square"></i>
             </a>
-            <a href="/delete/<%= question.id %>" class="btn btn-sm btn-danger" title="Delete">
+            <!-- <a href="/question/delete/" class="btn btn-sm btn-danger" title="Delete">
               <i class="bi bi-folder-x"></i>
+            </a> -->
+            <a href="#" class="btn btn-sm btn-danger btn-delete" data-id="<%= question.id %>" title="Delete">
+              <i class="bi bi-trash"></i>
             </a>
           </td>
         </tr>
@@ -128,5 +61,36 @@
 
   if (!isLogin || !window.token) {
     window.location.href = "/";
+  }
+
+  document.querySelectorAll(".btn-delete").forEach((button) => {
+    button.addEventListener("click", function (e) {
+      e.preventDefault();
+      const questionId = this.getAttribute("data-id");
+
+      Swal.fire({
+        title: "Yakin ingin menghapus?",
+        text: "Data tidak dapat dikembalikan!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#6c757d",
+        confirmButtonText: "Ya, hapus!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = `/question/delete/${questionId}`;
+        }
+      });
+    });
+  });
+
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("deleted") === "true") {
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil dihapus",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   }
 </script>

@@ -67,3 +67,14 @@ export const createQuestion = async (req, res) => {
     });
   }
 };
+
+export const deleteQuestion = async (req, res) => {
+  try {
+    const dataId = Number(req.params.id);
+    await questionModel.questionDelete(dataId);
+    res.redirect("/question?deleted=true");
+  } catch (error) {
+    console.error("error", error);
+    res.status(500).send("Internal Server Error");
+  }
+};
