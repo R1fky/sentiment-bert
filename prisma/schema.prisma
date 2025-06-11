@@ -17,7 +17,8 @@ model answer {
   preProcess_text String?  @db.VarChar(255) // ubah jadi varchar(255)
   sentiment       String?
   created_at      DateTime @default(now())
-  question        question @relation(fields: [questionId], references: [id], map: "Answer_questionId_fkey")
+  // question        question @relation(fields: [questionId], references: [id], map: "Answer_questionId_fkey")
+  question        question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@index([questionId], map: "Answer_questionId_fkey")
 }
