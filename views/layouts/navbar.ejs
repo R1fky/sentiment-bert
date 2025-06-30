@@ -9,16 +9,20 @@
 
 <!-- ✅ Sidebar (Desktop) -->
 <nav class="d-none d-lg-flex flex-column modern-sidebar p-3 shadow-sm" style="width: 240px; min-height: 100vh">
-  <a href="/" class="navbar-brand mb-4 fw-bold d-flex align-items-center gap-2"> <i class="bi bi-emoji-heart-eyes"></i> PNL Sentimen </a>
+  <!-- <a href="/" class="navbar-brand mb-4 fw-bold d-flex align-items-center gap-2"> <i class="bi bi-emoji-heart-eyes"></i> PNL Sentimen </a> -->
+  <a href="/" class="navbar-brand mb-4 fw-bold d-flex align-items-center gap-2">
+    <img src="/image/logo/pnlLogo.png" alt="PNL Logo" width="32" height="32" />
+    PNL Sentimen
+  </a>
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
       <a class="nav-link <%= (title === 'Dashboard') ? 'active' : '' %>" href="/dashboard"> <i class="bi bi-house-door me-2"></i> Dashboard </a>
     </li>
     <li>
-      <a class="nav-link <%= (title === 'Form Question') ? 'active' : '' %>" href="/form"> <i class="bi bi-input-cursor-text me-2"></i> Form </a>
+      <a class="nav-link <%= (title === 'Form Question') ? 'active' : '' %>" href="/form"> <i class="bi bi-input-cursor-text me-2"></i> Kuesinoner </a>
     </li>
     <li>
-      <a class="nav-link <%= (title === 'Question') ? 'active' : '' %>" href="/question"> <i class="bi bi-patch-question me-2"></i> Question </a>
+      <a class="nav-link <%= (title === 'List Forms') ? 'active' : '' %>" href="/forms"> <i class="bi bi-patch-question me-2"></i> Forms </a>
     </li>
     <li>
       <a class="nav-link <%= (title === 'Sentiment Trends') ? 'active' : '' %>" href="/report"> <i class="bi bi-graph-up me-2"></i> Sentiment Trends </a>

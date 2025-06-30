@@ -7,28 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model form {
-  id          Int        @id @default(autoincrement())
-  title       String
-  description String?
-  created_at  DateTime   @default(now())
-  questions   question[]
-}
-
-model question {
-  id                Int      @id @default(autoincrement())
-  formId            Int
-  question_text     String
-  question_category String
-  question_type     String   @default("radio")
-  created_at        DateTime @default(now())
-  answer            answer[]
-
-  form form @relation(fields: [formId], references: [id], onDelete: Cascade)
-
-  @@index([formId])
-}
-
 model answer {
   id              Int      @id @default(autoincrement())
   questionId      Int
@@ -36,13 +14,22 @@ model answer {
   email           String
   nim             String
   answer_text     String   @db.VarChar(255)
-  preProcess_text String?  @db.VarChar(255)
+  preProcess_text String?  @db.VarChar(255) // ubah jadi varchar(255)
   sentiment       String?
   created_at      DateTime @default(now())
-
-  question question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  // question        question @relation(fields: [questionId], references: [id], map: "Answer_questionId_fkey")
+  question        question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@index([questionId], map: "Answer_questionId_fkey")
+}
+
+model question {
+  id                Int      @id @default(autoincrement())
+  question_text     String
+  question_category String
+  question_type     String   @default("radio")
+  created_at        DateTime @default(now())
+  answer            answer[]
 }
 
 enum Role {

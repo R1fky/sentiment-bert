@@ -1,0 +1,132 @@
+<style>
+  .question-item {
+    border-left: 4px solid transparent;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .question-item.new {
+    border-left: 4px solid #90caf9; /* biru lembut */
+    background-color: #f8fbff;
+  }
+
+  .question-item:hover {
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.1);
+  }
+</style>
+
+<div class="container mt-5">
+  <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
+    <h3 class="fw-bold mb-4 text-primary"><i class="bi bi-journal-plus me-2"></i> Buat Formulir dan Pertanyaan</h3>
+
+    <form id="form-create">
+      <!-- Informasi Formulir -->
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Judul Formulir</label>
+        <input type="text" name="title" class="form-control rounded-3" required placeholder="Contoh: Survei Kepuasan Mahasiswa" />
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Deskripsi</label>
+        <textarea name="description" class="form-control rounded-3" rows="3" placeholder="Deskripsi singkat tentang formulir..."></textarea>
+      </div>
+
+      <!-- Pertanyaan -->
+      <div id="questions-container">
+        <div class="card p-3 shadow-sm mb-3 question-item">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0 fw-semibold text-primary">Pertanyaan #1</h6>
+          </div>
+          <input type="text" name="questions[]" class="form-control mb-2" placeholder="Tulis pertanyaan..." required />
+          <input type="text" name="categories[]" class="form-control mb-2" placeholder="Kategori pertanyaan (opsional)" />
+          <select name="types[]" class="form-select">
+            <option value="radio">Radio</option>
+            <option value="text">Text</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tombol Tambah Pertanyaan -->
+      <div class="mb-4">
+        <button type="button" class="btn btn-outline-primary rounded-pill" id="add-question-btn"><i class="bi bi-plus-circle me-1"></i> Tambah Pertanyaan</button>
+      </div>
+
+      <!-- Tombol Simpan -->
+      <button type="submit" class="btn btn-primary px-4 rounded-pill"><i class="bi bi-send-fill me-2"></i> Simpan Formulir</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  let questionCount = 1;
+
+  document.getElementById("add-question-btn").addEventListener("click", () => {
+    questionCount++;
+
+    const container = document.getElementById("questions-container");
+
+    const div = document.createElement("div");
+    div.className = "card p-3 shadow-sm mb-3 question-item new"; // ← tambahkan class 'new'
+    div.innerHTML = `
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <h6 class="mb-0 fw-semibold text-primary">Pertanyaan #${questionCount}</h6>
+      <button type="button" class="btn btn-sm btn-outline-danger btn-remove-question rounded-circle" title="Hapus">
+        <i class="bi bi-trash"></i>
+      </button>
+    </div>
+    <input type="text" name="questions[]" class="form-control mb-2" placeholder="Tulis pertanyaan..." required>
+    <input type="text" name="categories[]" class="form-control mb-2" placeholder="Kategori pertanyaan (opsional)">
+    <select name="types[]" class="form-select">
+      <option value="radio">Radio</option>
+      <option value="text">Text</option>
+    </select>
+  `;
+
+    container.appendChild(div);
+
+    div.querySelector(".btn-remove-question").addEventListener("click", () => {
+      div.remove();
+    });
+  });
+
+  document.getElementById("form-create").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+
+    const data = {
+      title: formData.get("title"),
+      description: formData.get("description"),
+      questions: formData.getAll("questions[]"),
+      categories: formData.getAll("categories[]"),
+      types: formData.getAll("types[]"),
+    };
+
+    try {
+      const response = await fetch("/forms/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "Formulir berhasil disimpan!",
+          showConfirmButton: false,
+          timer: 2000,
+        });
+
+        setTimeout(() => {
+          window.location.href = "/forms";
+        }, 2000);
+      } else {
+        const result = await response.json();
+        Swal.fire("Gagal", result.message || "Terjadi kesalahan", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "Gagal mengirim data ke server", "error");
+    }
+  });
+</script>

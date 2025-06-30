@@ -1,12 +1,13 @@
 import express from "express";
 import expressEjsLayouts from "express-ejs-layouts";
 // routing
-import questionRouter from "./routes/questionRoute.js";
 import formRouter from "./routes/formRoute.js";
 import dashboardRouter from "./routes/dashboardRoute.js";
 import answersRouter from "./routes/asnwersRoute.js";
 import loginRouter from "./routes/loginRoute.js";
-import adminReportRouter from './routes/adminReportRouter.js';
+import adminReportRouter from "./routes/adminReportRouter.js";
+// precess addForm
+import formsRouter from "./routes/formsRoute.js";
 
 const app = express();
 const port = 4000;
@@ -29,13 +30,13 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/question", questionRouter);
 app.use("/form", formRouter);
 app.use("/dashboard", dashboardRouter);
 //import batch answer
 app.use("/", answersRouter);
 app.use("/auth", loginRouter);
-app.use('/report', adminReportRouter);
+app.use("/report", adminReportRouter);
+app.use("/forms", formsRouter);
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);
