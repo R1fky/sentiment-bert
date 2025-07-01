@@ -1,5 +1,7 @@
 import * as formMhsModel from "../models/formMhsModel.js";
-import crypto from "crypto";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
+// import crypto from "crypto";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -41,9 +43,36 @@ export const showFormMhs = async (req, res) => {
 export const submitFormMhs = async (req, res) => {
   try {
     const { formId, nama, nim, email, answers } = req.body;
-    const insertAnswers = await formMhsModel.submitForm()
+
+    //cek user apakah sudah pernah isi
+    const existingUser = await prisma.answer.findFirst({
+      where: {
+        question: {
+          formId: Number(formId),
+        },
+        nim: nim,
+      },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "Anda Sudah Pernah Isi Kuesioner ini",
+      });
+    }
+    //lanjutkan jika belum pernah isi
+    const insertedAnswers = await formMhsModel.submitForm({ formId, nama, nim, email, answers });
+    return res.status(200).json({
+      success: true,
+      message: "Berhasil Submit kuesioner",
+      data: insertedAnswers,
+    });
   } catch (error) {
     console.error("Failed To Submit", error);
+    return res.status(500).json({
+      success: false,
+      message: "Terjadi kesalahan pada server.",
+    });
   }
 };
 

@@ -76,23 +76,44 @@
       }
     }
 
+    //loading
+    Swal.fire({
+      title: "Mengirim...",
+      text: "Silakan tunggu, sistem sedang memproses data Anda",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
+    });
+
     try {
       const response = await fetch("/form-mhs/submitForm", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ ...payload, formId }),
       });
 
       const result = await response.json();
 
-      if (result.ok) {
-        alert("jawaban berhasil dikirim dan di proses");
+      if (result.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil",
+          text: result.message || "Jawaban Anda berhasil disimpan!",
+        }).then(() => {
+          window.location.href = "/form-mhs";
+        });
       } else {
-        alert(result.message || "Gagal mengirim jawaban.");
+        Swal.fire({
+          icon: "error",
+          title: "Gagal",
+          text: result.message || "Gagal menyimpan jawaban.",
+        });
       }
     } catch (error) {
-      console.error("Terjadi kesalahan:", error);
-      alert("Terjadi kesalahan pada pengiriman.");
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text: result.message || "Gagal menyimpan terjadi kesalahan pada server.",
+      });
     }
   });
 </script>

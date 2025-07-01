@@ -25,6 +25,30 @@ export const getKuesioner = async (formId) => {
   }
 };
 
+export const submitForm = async ({ nama, nim, email, answers }) => {
+  try {
+    const insertedAnswers = await Promise.all(
+      Object.entries(answers).map(([questionId, answerText]) =>
+        prisma.answer.create({
+          data: {
+            questionId: Number(questionId),
+            nama,
+            nim,
+            email,
+            answer_text: answerText,
+            preProcess_text: null,
+            sentiment: null,
+          },
+        })
+      )
+    );
+
+    return insertedAnswers;
+  } catch (error) {
+    console.error("error gagal menyimpan jawaban :", error);
+  }
+};
+
 // export const submitForm = async (body) => {
 //   const { nama, email, nim, answers } = body;
 //   const insertedAnswers = [];
