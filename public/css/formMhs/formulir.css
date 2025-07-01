@@ -1,0 +1,41 @@
+.form-header {
+  background: linear-gradient(135deg, #ede7f6, #f3e5f5);
+  border-left: 5px solid #8e24aa;
+}
+
+.form-check-input:checked {
+  background-color: #8e24aa;
+  border-color: #8e24aa;
+}
+
+.form-check-label {
+  font-weight: 500;
+}
+
+.input-highlight {
+  border-radius: 1rem;
+  padding: 0.6rem 1.2rem;
+}
+
+.form-section {
+  background-color: #fafafa;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e0e0e0;
+}
+
+.question-label {
+  font-weight: 600;
+  color: #5e35b1;
+}
+
+.btn-primary {
+  background-color: #7b1fa2;
+  border-color: #7b1fa2;
+}
+
+.btn-primary:hover {
+  background-color: #6a1b9a;
+  border-color: #6a1b9a;
+}

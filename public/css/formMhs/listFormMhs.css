@@ -1,0 +1,35 @@
+.transition-hover {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.transition-hover:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+.bg-soft-purple {
+  background-color: #f6f3ff;
+}
+
+.btn-purple {
+  background-color: #6f42c1;
+  color: white;
+  border: none;
+}
+
+.btn-purple:hover {
+  background-color: #5a35a0;
+  color: white;
+}
+
+.text-purple {
+  color: #6f42c1;
+}
+
+.border-purple-subtle {
+  border-color: #e0d4f7 !important;
+}
+
+.highlight-yellow {
+  background-color: #fff9e6;
+}

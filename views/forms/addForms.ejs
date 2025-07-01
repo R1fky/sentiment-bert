@@ -1,20 +1,50 @@
 <style>
+  .fade-in {
+    opacity: 0;
+    animation: fadeIn 0.6s ease-in-out forwards;
+  }
+
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
   .question-item {
     border-left: 4px solid transparent;
     transition: all 0.3s ease-in-out;
   }
 
   .question-item.new {
-    border-left: 4px solid #90caf9; /* biru lembut */
+    border-left: 4px solid #90caf9;
     background-color: #f8fbff;
+    transform: translateY(20px);
+    opacity: 0;
+    animation: slideIn 0.4s ease forwards;
   }
+
+  @keyframes slideIn {
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  /* .question-item.new {
+    border-left: 4px solid #90caf9; 
+    background-color: #f8fbff;
+  } */
 
   .question-item:hover {
     box-shadow: 0 0 10px rgba(0, 123, 255, 0.1);
   }
+
+  .btn:hover {
+    transform: scale(1.03);
+    transition: transform 0.2s ease;
+  }
 </style>
 
-<div class="container mt-5">
+<div class="container mt-5 fade-in">
   <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
     <h3 class="fw-bold mb-4 text-primary"><i class="bi bi-journal-plus me-2"></i> Buat Formulir dan Pertanyaan</h3>
 
@@ -85,7 +115,10 @@
     container.appendChild(div);
 
     div.querySelector(".btn-remove-question").addEventListener("click", () => {
-      div.remove();
+      div.style.transition = "all 0.3s ease";
+      div.style.opacity = "0";
+      div.style.transform = "translateX(30px)";
+      setTimeout(() => div.remove(), 300);
     });
   });
 

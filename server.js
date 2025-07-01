@@ -1,7 +1,7 @@
 import express from "express";
 import expressEjsLayouts from "express-ejs-layouts";
 // routing
-import formRouter from "./routes/formRoute.js";
+import formMhsRouter from "./routes/formMhsRoute.js";
 import dashboardRouter from "./routes/dashboardRoute.js";
 import answersRouter from "./routes/asnwersRoute.js";
 import loginRouter from "./routes/loginRoute.js";
@@ -30,7 +30,7 @@ app.get("/", (req, res) => {
   });
 });
 
-app.use("/form", formRouter);
+app.use("/form-mhs", formMhsRouter);
 app.use("/dashboard", dashboardRouter);
 //import batch answer
 app.use("/", answersRouter);
