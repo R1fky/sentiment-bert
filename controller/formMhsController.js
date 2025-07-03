@@ -1,4 +1,5 @@
 import * as formMhsModel from "../models/formMhsModel.js";
+import axios from "axios";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 // import crypto from "crypto";
@@ -44,6 +45,13 @@ export const submitFormMhs = async (req, res) => {
   try {
     const { formId, nama, nim, email, answers } = req.body;
 
+    console.log("📝 Data Diterima dari Mahasiswa:");
+    console.log("Form ID:", formId);
+    console.log("Nama:", nama);
+    console.log("NIM:", nim);
+    console.log("Email:", email);
+    console.log("Answers:", answers);
+
     //cek user apakah sudah pernah isi
     const existingUser = await prisma.answer.findFirst({
       where: {
@@ -62,10 +70,47 @@ export const submitFormMhs = async (req, res) => {
     }
     //lanjutkan jika belum pernah isi
     const insertedAnswers = await formMhsModel.submitForm({ formId, nama, nim, email, answers });
+
+    const radioOptionsMap = {
+      1: "Sangat Puas",
+      2: "Puas",
+      3: "Netral",
+      4: "Tidak Puas",
+      5: "Sangat Tidak Puas",
+    };
+
+    //kirim pada flask
+    const payload = {
+      answers: insertedAnswers.map((answer) => {
+        const convertText = radioOptionsMap[answer.answer_text] || answer.answer_text;
+        return {
+          id: answer.id,
+          text: convertText,
+        };
+      }),
+    };
+    console.log(payload)
+
+    const response = await axios.post("http://localhost:5000/api/predict", payload);
+
+    // Flask mengembalikan array
+    const results = response.data;
+
+    // Update satu per satu berdasarkan ID
+    for (const result of results) {
+      await prisma.answer.update({
+        where: { id: result.id },
+        data: {
+          preProcess_text: result.preprocessed_text,
+          sentiment: result.sentiment,
+        },
+      });
+    }
+
     return res.status(200).json({
       success: true,
       message: "Berhasil Submit kuesioner",
-      data: insertedAnswers,
+      nim: nim,
     });
   } catch (error) {
     console.error("Failed To Submit", error);
@@ -73,6 +118,38 @@ export const submitFormMhs = async (req, res) => {
       success: false,
       message: "Terjadi kesalahan pada server.",
     });
+  }
+};
+
+export const resultKuesionerMhs = async (req, res) => {
+  const { nim } = req.params;
+
+  try {
+    const hasil = await prisma.answer.findMany({
+      where: { nim: nim },
+      include: {
+        question: true,
+      },
+      orderBy: {
+        questionId: "asc",
+      },
+    });
+
+    // hitung hasil sentiment
+    const sentimentCounts = {
+      positif: hasil.filter((h) => h.sentiment === "positif").length,
+      netral: hasil.filter((h) => h.sentiment === "netral").length,
+      negatif: hasil.filter((h) => h.sentiment === "negatif").length,
+    };
+
+    res.render("mhs/hasilSentimen", {
+      title: `Hasil Sentimen Anda - ${nim}`,
+      layout: "layouts/main",
+      hasil,
+      sentimentCounts,
+    });
+  } catch (error) {
+    console.error("Gagal Menampilkan Hasil Sentiment", error);
   }
 };
 

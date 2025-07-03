@@ -96,10 +96,13 @@
       if (result.success) {
         Swal.fire({
           icon: "success",
-          title: "Berhasil",
-          text: result.message || "Jawaban Anda berhasil disimpan!",
+          title: "Login Berhasil",
+          text: result.message,
+          timer: 2000,
+          showConfirmButton: false,
         }).then(() => {
-          window.location.href = "/form-mhs";
+          // Redirect ke halaman hasil berdasarkan NIM
+          window.location.href = `/form-mhs/hasil/${payload.nim}`;
         });
       } else {
         Swal.fire({

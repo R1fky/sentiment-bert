@@ -7,11 +7,13 @@ const router = express.Router();
 
 const SECRET_KEY = process.env.SECRET_KEY || "a98d3faea1c409d2a99a9e88d7541a2b3d928f0d3dcb2c7c2497331edc3fc7e1";
 
-router.get('/', formMhsController.listFormMhs)
+router.get("/", formMhsController.listFormMhs);
 router.get("/:id/isi", formMhsController.showFormMhs);
-//simpan jawaban kuesioner mahasiswa 
-router.post('/submitForm', formMhsController.submitFormMhs)
+//simpan jawaban kuesioner mahasiswa
+router.post("/submitForm", formMhsController.submitFormMhs);
 
+// hasil sentimen submit
+router.get("/hasil/:nim", formMhsController.resultKuesionerMhs);
 
 // router.post("/submitForm", formController.submitForm);
 // router.get("/sentimenUser", formController.showSentimentUser);
@@ -22,7 +24,7 @@ router.post('/submitForm', formMhsController.submitFormMhs)
 //   if (!nama || !email || !nim) {
 //     return res.status(400).json({ error: "Missing parameters" });
 //   }
-  
+
 //   if (!SECRET_KEY) {
 //     return res.status(500).json({ error: "Server misconfiguration: SECRET_KEY not set" });
 //   }

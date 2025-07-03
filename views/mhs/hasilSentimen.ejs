@@ -1,0 +1,117 @@
+<div class="container py-4" style="background-color: #f4f6fa; min-height: 100vh">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="row g-4">
+
+        <!-- Profil & Ringkasan -->
+        <div class="col-md-4">
+          <div class="card text-center shadow-sm border-0 p-4 bg-white rounded-4">
+            <img src="https://ui-avatars.com/api/?name=<%= encodeURIComponent(hasil[0]?.nama || 'User') %>&background=random" class="rounded-circle mx-auto mb-3" width="70" height="70" alt="Avatar" />
+            <h6 class="mb-1 text-purple-700 fw-bold"><%= hasil[0]?.nama || "Tidak Diketahui" %></h6>
+            <p class="text-muted mb-3 small">Mahasiswa</p>
+            <hr />
+            <h6 class="mb-3 text-purple-700">Ringkasan Sentimen</h6>
+            <ul class="list-group text-start small">
+              <li class="list-group-item d-flex justify-content-between border-0 px-1"><span class="text-success">Positif</span><span><%= sentimentCounts.positif %></span></li>
+              <li class="list-group-item d-flex justify-content-between border-0 px-1"><span class="text-warning">Netral</span><span><%= sentimentCounts.netral %></span></li>
+              <li class="list-group-item d-flex justify-content-between border-0 px-1"><span class="text-danger">Negatif</span><span><%= sentimentCounts.negatif %></span></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Hasil -->
+        <div class="col-md-8">
+          <!-- Chart Pie -->
+          <div class="card shadow-sm border-0 bg-white rounded-4 mb-4">
+            <div class="card-body">
+              <h6 class="card-title text-center text-purple-700 fw-bold">Distribusi Sentimen Jawaban</h6>
+              <div class="d-flex justify-content-center">
+                <div style="width: 220px; height: 220px;">
+                  <canvas id="sentimentPieChart" width="220" height="220"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tabel Jawaban -->
+          <div class="card shadow-sm border-0 bg-white rounded-4">
+            <div class="card-header bg-white border-bottom text-purple-700 fw-bold small">Detail Jawaban Anda</div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle small">
+                  <thead class="table-light text-center">
+                    <tr>
+                      <th>No</th>
+                      <th>Pertanyaan</th>
+                      <th>Jawaban</th>
+                      <th>Sentimen</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% hasil.forEach((item, index) => { %>
+                    <tr>
+                      <td class="text-center"><%= index + 1 %></td>
+                      <td><%= item.question?.question_text || "-" %></td>
+                      <td><%= item.answer_text %></td>
+                      <td class="text-center">
+                        <span class="badge 
+                          <%= item.sentiment === 'positif' ? 'bg-success' : item.sentiment === 'netral' ? 'bg-warning text-dark' : 'bg-danger' %>">
+                          <%= item.sentiment %>
+                        </span>
+                      </td>
+                    </tr>
+                    <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div> <!-- col-md-8 -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('sentimentPieChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: ['Positif', 'Netral', 'Negatif'],
+      datasets: [{
+        data: [<%= sentimentCounts.positif %>, <%= sentimentCounts.netral %>, <%= sentimentCounts.negatif %>],
+        backgroundColor: [
+          'rgba(25, 135, 84, 0.8)',   // Hijau
+          'rgba(255, 193, 7, 0.8)',   // Kuning
+          'rgba(220, 53, 69, 0.8)'    // Merah
+        ],
+        borderColor: '#fff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#333',
+            font: {
+              size: 12
+            }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return `${context.label}: ${context.raw} jawaban`;
+            }
+          }
+        }
+      }
+    }
+  });
+</script>

@@ -5,7 +5,8 @@ async function resetDatabase() {
   try {
     await prisma.answer.deleteMany({});
     await prisma.question.deleteMany({});
-
+    await prisma.form.deleteMany({});
+    await prisma.$executeRawUnsafe(`ALTER TABLE form AUTO_INCREMENT = 1;`);
     await prisma.$executeRawUnsafe(`ALTER TABLE answer AUTO_INCREMENT = 1;`);
     await prisma.$executeRawUnsafe(`ALTER TABLE question AUTO_INCREMENT = 1;`);
 
