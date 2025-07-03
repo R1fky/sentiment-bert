@@ -38,7 +38,13 @@ export const getFormDetailId = async (formId) => {
   try {
     return await prisma.form.findUnique({
       where: { id: formId },
-      include: { questions: true },
+      include : {
+        questions : {
+          include : {
+            answer : true
+          }
+        }
+      }
     });
   } catch (error) {
     console.error("Data failed No Result");

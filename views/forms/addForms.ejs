@@ -1,52 +1,8 @@
-<style>
-  .fade-in {
-    opacity: 0;
-    animation: fadeIn 0.6s ease-in-out forwards;
-  }
-
-  @keyframes fadeIn {
-    to {
-      opacity: 1;
-    }
-  }
-  .question-item {
-    border-left: 4px solid transparent;
-    transition: all 0.3s ease-in-out;
-  }
-
-  .question-item.new {
-    border-left: 4px solid #90caf9;
-    background-color: #f8fbff;
-    transform: translateY(20px);
-    opacity: 0;
-    animation: slideIn 0.4s ease forwards;
-  }
-
-  @keyframes slideIn {
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-
-  /* .question-item.new {
-    border-left: 4px solid #90caf9; 
-    background-color: #f8fbff;
-  } */
-
-  .question-item:hover {
-    box-shadow: 0 0 10px rgba(0, 123, 255, 0.1);
-  }
-
-  .btn:hover {
-    transform: scale(1.03);
-    transition: transform 0.2s ease;
-  }
-</style>
+<link rel="stylesheet" href="/css/forms/addForms.css">
 
 <div class="container mt-5 fade-in">
   <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
-    <h3 class="fw-bold mb-4 text-primary"><i class="bi bi-journal-plus me-2"></i> Buat Formulir dan Pertanyaan</h3>
+    <h3 class="fw-bold mb-4"><i class="bi bi-journal-plus me-2"></i> Buat Formulir dan Pertanyaan</h3>
 
     <form id="form-create">
       <!-- Informasi Formulir -->
@@ -60,14 +16,24 @@
         <textarea name="description" class="form-control rounded-3" rows="3" placeholder="Deskripsi singkat tentang formulir..."></textarea>
       </div>
 
-      <!-- Pertanyaan -->
       <div id="questions-container">
         <div class="card p-3 shadow-sm mb-3 question-item">
           <div class="d-flex justify-content-between align-items-center mb-2">
-            <h6 class="mb-0 fw-semibold text-primary">Pertanyaan #1</h6>
+            <h6 class="mb-0 fw-semibold">Pertanyaan #1</h6>
           </div>
           <input type="text" name="questions[]" class="form-control mb-2" placeholder="Tulis pertanyaan..." required />
-          <input type="text" name="categories[]" class="form-control mb-2" placeholder="Kategori pertanyaan (opsional)" />
+
+          <!-- Dropdown kategori -->
+          <select name="categories[]" class="form-select mb-2">
+            <option value="">Pilih kategori pertanyaan</option>
+            <option value="Akademik">Akademik</option>
+            <option value="Fasilitas">Fasilitas</option>
+            <option value="Pelayanan Dosen">Pelayanan Dosen</option>
+            <option value="Administrasi">Administrasi</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
+
+          <!-- Tipe pertanyaan -->
           <select name="types[]" class="form-select">
             <option value="radio">Radio</option>
             <option value="text">Text</option>
@@ -87,30 +53,38 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- JS untuk Tambah Pertanyaan & Submit -->
 <script>
   let questionCount = 1;
 
   document.getElementById("add-question-btn").addEventListener("click", () => {
     questionCount++;
-
     const container = document.getElementById("questions-container");
 
     const div = document.createElement("div");
-    div.className = "card p-3 shadow-sm mb-3 question-item new"; // ← tambahkan class 'new'
+    div.className = "card p-3 shadow-sm mb-3 question-item new";
     div.innerHTML = `
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <h6 class="mb-0 fw-semibold text-primary">Pertanyaan #${questionCount}</h6>
-      <button type="button" class="btn btn-sm btn-outline-danger btn-remove-question rounded-circle" title="Hapus">
-        <i class="bi bi-trash"></i>
-      </button>
-    </div>
-    <input type="text" name="questions[]" class="form-control mb-2" placeholder="Tulis pertanyaan..." required>
-    <input type="text" name="categories[]" class="form-control mb-2" placeholder="Kategori pertanyaan (opsional)">
-    <select name="types[]" class="form-select">
-      <option value="radio">Radio</option>
-      <option value="text">Text</option>
-    </select>
-  `;
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="mb-0 fw-semibold">Pertanyaan #${questionCount}</h6>
+        <button type="button" class="btn btn-sm btn-outline-danger btn-remove-question rounded-circle" title="Hapus">
+          <i class="bi bi-trash"></i>
+        </button>
+      </div>
+      <input type="text" name="questions[]" class="form-control mb-2" placeholder="Tulis pertanyaan..." required>
+      <select name="categories[]" class="form-select mb-2">
+        <option value="">Pilih kategori pertanyaan</option>
+        <option value="Akademik">Akademik</option>
+        <option value="Fasilitas">Fasilitas</option>
+        <option value="Pelayanan Dosen">Pelayanan Dosen</option>
+        <option value="Administrasi">Administrasi</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
+      <select name="types[]" class="form-select">
+        <option value="radio">Radio</option>
+        <option value="text">Text</option>
+      </select>
+    `;
 
     container.appendChild(div);
 
@@ -150,7 +124,6 @@
           showConfirmButton: false,
           timer: 2000,
         });
-
         setTimeout(() => {
           window.location.href = "/forms";
         }, 2000);
@@ -163,3 +136,4 @@
     }
   });
 </script>
+

@@ -50,10 +50,35 @@ export const getFormDetail = async (req, res) => {
         message: "Formulir tidak ditemukan",
       });
     }
+
+    const pertanyaanRekapSentiment = form.questions.map((q) => {
+      const counts = {
+        positif: 0,
+        netral: 0,
+        negatif: 0,
+      };
+
+      q.answer.forEach((ans) => {
+        if (ans.sentiment && counts.hasOwnProperty(ans.sentiment)) {
+          counts[ans.sentiment]++;
+        }
+      });
+
+      return {
+        id: q.id,
+        question_text: q.question_text,
+        question_category: q.question_category,
+        question_type: q.question_type,
+        sentiments: counts,
+        totalJawaban: q.answer.length,
+      };
+    });
+
     res.render("forms/detailForms", {
       title: `Detail form - ${form.title}`,
       layout: "layouts/main",
       form,
+      pertanyaanRekapSentiment,
     });
   } catch (error) {
     console.error("Gagal menampilkan detail : ", error);
