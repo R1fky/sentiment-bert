@@ -1,37 +1,25 @@
-<link rel="stylesheet" href="/css/dashboard.css"/>
+<!-- views/dashboard.ejs -->
+<link rel="stylesheet" href="/css/dashboard.css" />
+
 <div class="container py-4">
-  <div class="bg-white p-6 rounded-xl shadow-md mb-6">
-    <h2 class="dashboard-header text-2xl font-bold text-gray-800">Dashboard</h2>
+  <div class="bg-white p-4 rounded shadow mb-4">
+    <h2 class="text-primary fw-bold">Dashboard</h2>
   </div>
-  <!-- Top Summary Cards - Modern Look -->
+
+  <!-- Summary Cards -->
   <div class="row g-4 mb-4">
+    <% const cards = [ { label: 'Positif', color: '#198754', value: summary.positif, icon: 'bi-emoji-smile' }, { label: 'Netral', color: '#6c757d', value: summary.netral, icon: 'bi-emoji-neutral' }, { label: 'Negatif', color: '#dc3545',
+    value: summary.negatif, icon: 'bi-emoji-frown' } ]; %> <% cards.forEach((card) => { %>
     <div class="col-md-4">
-      <div class="card-box text-white" style="background: linear-gradient(135deg, #28a745, #218838)">
+      <div class="card-box text-white" style="background-color: <%= card.color %>">
         <div>
-          <div class="info-box fs-3"><%= summary.positif %> Jawaban</div>
-          <div class="info-label text-white-50">Sentimen Positif</div>
+          <div class="info-box fs-3"><%= card.value %> Jawaban</div>
+          <div class="info-label text-white-50">Sentimen <%= card.label %></div>
         </div>
-        <div class="card-icon fs-1"><i class="bi bi-emoji-smile"></i></div>
+        <div class="card-icon fs-1"><i class="bi <%= card.icon %>"></i></div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="card-box text-white" style="background: linear-gradient(135deg, #6c757d, #5a6268)">
-        <div>
-          <div class="info-box fs-3"><%= summary.netral %> Jawaban</div>
-          <div class="info-label text-white-50">Sentimen Netral</div>
-        </div>
-        <div class="card-icon fs-1"><i class="bi bi-emoji-neutral"></i></div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card-box text-white" style="background: linear-gradient(135deg, #dc3545, #c82333)">
-        <div>
-          <div class="info-box fs-3"><%= summary.negatif %> Jawaban</div>
-          <div class="info-label text-white-50">Sentimen Negatif</div>
-        </div>
-        <div class="card-icon fs-1"><i class="bi bi-emoji-frown"></i></div>
-      </div>
-    </div>
+    <% }) %>
   </div>
 
   <!-- Chart Section -->
@@ -50,169 +38,155 @@
     </div>
   </div>
 
-    <!-- Bottom Section - Modern with Scroll Animations -->
-    <div class="row g-4">
-      <!-- Aktivitas Terbaru -->
-      <div class="col-md-6">
-        <div class="card shadow-sm p-4 rounded-4 scroll-animate" style="transform: translateY(30px); opacity: 0; transition: all 0.6s ease-out">
-          <h5 class="section-title mb-3">Aktivitas Terbaru</h5>
-          <ul class="list-group list-group-flush activity-list">
-            <% activity.forEach((item, index) => { %>
-            <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0" style="transform: translateX(-20px); opacity: 0; transition: all 0.4s ease-out; transition-delay: <%= index * 0.1 %>s">
-              <span><i class="bi bi-clock-history me-2 text-primary"></i><%= item.text %></span>
-              <small class="text-muted"><%= item.time %></small>
-            </li>
-            <% }) %>
-          </ul>
-        </div>
+  <!-- Aktivitas dan Status -->
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="card shadow-sm p-4 scroll-animate">
+        <h5 class="section-title mb-3">Aktivitas Terbaru</h5>
+        <ul class="list-group list-group-flush activity-list">
+          <% activity.forEach((item, i) => { %>
+          <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0" style="transition-delay: <%= i * 0.1 %>s">
+            <span><i class="bi bi-clock-history me-2 text-primary"></i><%= item.text %></span>
+            <small class="text-muted"><%= item.time %></small>
+          </li>
+          <% }) %>
+        </ul>
       </div>
+    </div>
 
-      <!-- Status Tanggapan -->
-      <div class="col-md-6">
-        <div class="card shadow-sm p-4 rounded-4 scroll-animate" style="transform: translateY(30px); opacity: 0; transition: all 0.6s ease-out 0.2s">
-          <h5 class="section-title mb-3">Status Tanggapan</h5>
-          <table class="table table-borderless align-middle">
-            <thead class="text-muted small">
-              <tr>
-                <th>Kategori</th>
-                <th>Responden</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody class="table-rows">
-              <% categoryStatus.forEach((item, index) => { %>
-              <tr style="transform: translateY(10px); opacity: 0; transition: all 0.4s ease-out; transition-delay: <%= index * 0.1 + 0.2 %>s">
-                <td><%= item.kategori %></td>
-                <td><%= item.responden %></td>
-                <td>
-                  <% if (item.status === "Selesai") { %>
-                  <span class="badge bg-success-subtle text-success fw-semibold px-3 py-1 rounded-pill">Selesai</span>
-                  <% } else if (item.status === "Diproses") { %>
-                  <span class="badge bg-warning-subtle text-warning fw-semibold px-3 py-1 rounded-pill">Diproses</span>
-                  <% } else { %>
-                  <span class="badge bg-danger-subtle text-danger fw-semibold px-3 py-1 rounded-pill">Tertunda</span>
-                  <% } %>
-                </td>
-              </tr>
-              <% }) %>
-            </tbody>
-          </table>
-        </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm p-4 scroll-animate">
+        <h5 class="section-title mb-3">Status Tanggapan</h5>
+        <table class="table table-borderless align-middle table-rows">
+          <thead class="text-muted small">
+            <tr>
+              <th>Kategori</th>
+              <th>Responden</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% categoryStatus.forEach((item, i) => { %>
+            <tr style="transition-delay: <%= i * 0.1 %>s">
+              <td><%= item.kategori %></td>
+              <td><%= item.responden %></td>
+              <td>
+                <% if (item.status === "Selesai") { %>
+                <span class="badge bg-success-subtle text-success fw-semibold px-3 py-1 rounded-pill">Selesai</span>
+                <% } else if (item.status === "Diproses") { %>
+                <span class="badge bg-warning-subtle text-warning fw-semibold px-3 py-1 rounded-pill">Diproses</span>
+                <% } else { %>
+                <span class="badge bg-danger-subtle text-danger fw-semibold px-3 py-1 rounded-pill">Tertunda</span>
+                <% } %>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </div>
-  <!-- Chart.js Scripts -->
-  <script>
-      const ctxBar = document.getElementById('sentimentChart').getContext('2d');
-      new Chart(ctxBar, {
-        type: 'bar',
-        data: {
-          labels: <%- JSON.stringify(labels) %>,
-          datasets: [
-            {
-              label: 'Positif',
-              data: <%- JSON.stringify(positifData) %>,
-              backgroundColor: '#198754'
-            },
-            {
-              label: 'Netral',
-              data: <%- JSON.stringify(netralData) %>,
-              backgroundColor: '#6c757d'
-            },
-            {
-              label: 'Negatif',
-              data: <%- JSON.stringify(negatifData) %>,
-              backgroundColor: '#dc3545'
-            }
-          ]
+
+<!-- Script Section -->
+<script>
+  // Cek role dari localStorage (Frontend Authorization)
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (!user || user.role !== "ADMIN") {
+    alert("Anda tidak memiliki izin untuk mengakses halaman ini.");
+    window.location.href = "/";
+  }
+
+  // Bar Chart
+  const ctxBar = document.getElementById('sentimentChart').getContext('2d');
+  new Chart(ctxBar, {
+    type: 'bar',
+    data: {
+      labels: <%- JSON.stringify(labels) %>,
+      datasets: [
+        {
+          label: 'Positif',
+          data: <%- JSON.stringify(positifData) %>,
+          backgroundColor: '#198754'
         },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-              title: {
-                display: true,
-                text: 'Persentase (%)'
-              }
-            }
+        {
+          label: 'Netral',
+          data: <%- JSON.stringify(netralData) %>,
+          backgroundColor: '#6c757d'
+        },
+        {
+          label: 'Negatif',
+          data: <%- JSON.stringify(negatifData) %>,
+          backgroundColor: '#dc3545'
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Jumlah'
           }
         }
-      });
+      }
+    }
+  });
 
-      const ctxPie = document.getElementById('sentimentPieChart').getContext('2d');
-      new Chart(ctxPie, {
-        type: 'doughnut',
-        data: {
-          labels: ['Positif', 'Netral', 'Negatif'],
-          datasets: [{
-            data: [<%= summary.positif %>, <%= summary.netral %>, <%= summary.negatif %>],
-            backgroundColor: ['#198754', '#6c757d', '#dc3545']
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              position: 'bottom'
-            }
-          }
+  // Pie Chart
+  const ctxPie = document.getElementById('sentimentPieChart').getContext('2d');
+  new Chart(ctxPie, {
+    type: 'doughnut',
+    data: {
+      labels: ['Positif', 'Netral', 'Negatif'],
+      datasets: [{
+        data: [<%= summary.positif %>, <%= summary.netral %>, <%= summary.negatif %>],
+        backgroundColor: ['#198754', '#6c757d', '#dc3545']
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom'
+        }
+      }
+    }
+  });
+
+  // Animasi Scroll
+  document.addEventListener('DOMContentLoaded', function () {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const cards = document.querySelectorAll('.scroll-animate');
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          cardObserver.unobserve(entry.target);
         }
       });
+    }, observerOptions);
 
-      document.addEventListener('DOMContentLoaded', function() {
-      // Configure the Intersection Observer
-      const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-      };
+    cards.forEach(card => cardObserver.observe(card));
 
-      // Animation for cards
-      const cards = document.querySelectorAll('.scroll-animate');
-      const cardObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-            cardObserver.unobserve(entry.target);
-          }
-        });
-      }, observerOptions);
-
-      cards.forEach(card => {
-        cardObserver.observe(card);
+    const items = [...document.querySelectorAll('.activity-list li, .table-rows tr')];
+    const itemObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          itemObserver.unobserve(entry.target);
+        }
       });
+    }, observerOptions);
 
-      // Animation for list items (after card animation)
-      const activityItems = document.querySelectorAll('.activity-list li');
-      const tableRows = document.querySelectorAll('.table-rows tr');
-
-      const itemObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('show');
-            itemObserver.unobserve(entry.target);
-          }
-        });
-      }, observerOptions);
-
-      // Only observe items after their parent card is visible
-      const checkItemsVisibility = setInterval(() => {
-        cards.forEach(card => {
-          if (card.classList.contains('show')) {
-            if (card.querySelector('.activity-list')) {
-              activityItems.forEach(item => itemObserver.observe(item));
-            }
-            if (card.querySelector('.table-rows')) {
-              tableRows.forEach(row => itemObserver.observe(row));
-            }
-          }
-        });
-      }, 100);
-
-      // Clean up interval
-      setTimeout(() => {
-        clearInterval(checkItemsVisibility);
-      }, 3000);
-    });
-  </script>
+    setTimeout(() => {
+      items.forEach(item => itemObserver.observe(item));
+    }, 300);
+  });
+</script>

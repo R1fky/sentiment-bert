@@ -1,13 +1,18 @@
 import express from "express";
 import expressEjsLayouts from "express-ejs-layouts";
+
+//cokie parser
+import cookieParser from "cookie-parser";
 // routing
 import formMhsRouter from "./routes/formMhsRoute.js";
 import dashboardRouter from "./routes/dashboardRoute.js";
 // import answersRouter from "./routes/asnwersRoute.js";
 import loginRouter from "./routes/loginRoute.js";
-// import adminReportRouter from "./routes/adminReportRouter.js";
 // precess addForm
 import formsRouter from "./routes/formsRoute.js";
+
+// auth middleware
+import { authenticateJWT, authorizeRoles } from "./middleware/auth.js";
 
 const app = express();
 const port = 4000;
@@ -31,12 +36,13 @@ app.get("/", (req, res) => {
 });
 
 app.use("/form-mhs", formMhsRouter);
-app.use("/dashboard", dashboardRouter);
+app.use(cookieParser()); // <- pasang di atas route
+app.use("/dashboard", authenticateJWT, authorizeRoles("ADMIN", "SUPERADMIN"), dashboardRouter);
 //import batch answer
 // app.use("/", answersRouter);
 app.use("/auth", loginRouter);
 // app.use("/report", adminReportRouter);
-app.use("/forms", formsRouter);
+app.use("/forms", authenticateJWT, authorizeRoles("ADMIN", "SUPERADMIN"), formsRouter);
 
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);

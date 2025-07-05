@@ -28,6 +28,21 @@ document.getElementById("loginUser").addEventListener("submit", async function (
 
     if (result.success) {
       Swal.close();
+
+      // Simpan token di localStorage
+      localStorage.setItem("token", result.token);
+
+      // Simpan token di cookie (biar server-side bisa baca saat res.render)
+      document.cookie = `token=${result.token}; path=/; max-age=3600`; // berlaku 1 jam
+
+      // Simpan data user ke localStorage
+      const user = {
+        id: result.data.id,
+        username: result.data.username,
+        role: result.data.role,
+      };
+      localStorage.setItem("user", JSON.stringify(user));
+
       Swal.fire({
         icon: "success",
         title: "Login Berhasil",
@@ -35,14 +50,7 @@ document.getElementById("loginUser").addEventListener("submit", async function (
         timer: 2000,
         showConfirmButton: false,
       }).then(() => {
-        localStorage.setItem("token", result.token);
-        const user = {
-          id: result.data.id,
-          username: result.data.username,
-          role: result.data.role,
-        };
-        localStorage.setItem("user", JSON.stringify(user));
-        window.location.href = "/"; // Reload the page after success
+        window.location.href = "/"; // Arahkan ke halaman utama atau dashboard
       });
     } else {
       Swal.close();
@@ -59,7 +67,7 @@ document.getElementById("loginUser").addEventListener("submit", async function (
     Swal.fire({
       icon: "error",
       title: "Failed to Login",
-      text: result.message,
+      text: "Terjadi kesalahan saat login.",
       timer: 2000,
       showConfirmButton: false,
     });
