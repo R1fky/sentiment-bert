@@ -20,6 +20,7 @@ const port = 4000;
 //middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
 
 //view engine
 app.use(expressEjsLayouts);
@@ -36,7 +37,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/form-mhs", formMhsRouter);
-app.use(cookieParser()); // <- pasang di atas route
 app.use("/dashboard", authenticateJWT, authorizeRoles("ADMIN", "SUPERADMIN"), dashboardRouter);
 //import batch answer
 // app.use("/", answersRouter);

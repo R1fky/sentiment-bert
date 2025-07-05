@@ -1,24 +1,22 @@
 const userString = localStorage.getItem("user");
 const parsedUser = userString ? JSON.parse(userString) : null;
-// const token = localStorage.getItem("token");
 window.token = localStorage.getItem("token");
 
 const auth = document.getElementById("auth"); // Sidebar desktop
 const mobileAuth = document.getElementById("mobile-auth"); // Navbar mobile
 
-// Sembunyikan menu untuk non-admin
-if (!parsedUser || parsedUser.role !== "ADMIN" || !window.token) {
-  const sentimentMenus = document.querySelectorAll("a[href='/report']");
-  sentimentMenus.forEach((menu) => {
-    menu.style.display = "none";
-  });
+// 🔒 Sembunyikan menu jika bukan ADMIN / SUPERADMIN
+if (!parsedUser || !["ADMIN", "SUPERADMIN"].includes(parsedUser.role) || !window.token) {
+  const adminMenus = ["a[href='/dashboard']", "a[href='/forms']"];
 
-  const questionMenus = document.querySelectorAll("a[href='/question']");
-  questionMenus.forEach((menu) => {
-    menu.style.display = "none";
+  adminMenus.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((menu) => {
+      menu.style.display = "none";
+    });
   });
 }
 
+// 🔄 Render tombol login atau dropdown user
 function renderDropdown(username) {
   return `
     <div class="dropdown">
@@ -44,11 +42,17 @@ if (mobileAuth) {
   mobileAuth.innerHTML = parsedUser ? renderDropdown(parsedUser.username) : renderLoginButton();
 }
 
+// 🔓 Fungsi logout
 document.addEventListener("click", function (e) {
   if (e.target.id === "logout-btn") {
     e.preventDefault();
+
+    // Bersihkan session
     localStorage.removeItem("user");
     localStorage.removeItem("token");
+    document.cookie = "token=; path=/; max-age=0";
+
+    // Redirect ke halaman awal
     window.location.href = "/";
   }
 });

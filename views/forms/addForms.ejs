@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/css/forms/addForms.css">
+<link rel="stylesheet" href="/css/forms/addForms.css" />
 
 <div class="container mt-5 fade-in">
   <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
@@ -112,7 +112,7 @@
     try {
       const response = await fetch("/forms/add", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
       });
 
@@ -136,4 +136,3 @@
     }
   });
 </script>
-

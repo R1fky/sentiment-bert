@@ -24,9 +24,6 @@
     <li>
       <a class="nav-link <%= (title === 'List Forms') ? 'active' : '' %>" href="/forms"> <i class="bi bi-patch-question me-2"></i> Forms </a>
     </li>
-    <li>
-      <a class="nav-link <%= (title === 'Sentiment Trends') ? 'active' : '' %>" href="/report"> <i class="bi bi-graph-up me-2"></i> Sentiment Trends </a>
-    </li>
   </ul>
   <div id="auth" class="mt-auto">
     <!-- JS Auth -->
@@ -37,8 +34,7 @@
 <nav class="d-lg-none modern-bottom-nav fixed-bottom py-2">
   <div class="container-fluid d-flex justify-content-around text-center">
     <a href="/dashboard" class="<%= (title === 'Dashboard') ? 'fw-bold' : '' %>"> <i class="bi bi-house-door d-block"></i><small>Dashboard</small> </a>
-    <a href="/form" class="<%= (title === 'Form Question') ? 'fw-bold' : '' %>"> <i class="bi bi-input-cursor-text d-block"></i><small>Form</small> </a>
-    <a href="/question" class="<%= (title === 'Question') ? 'fw-bold' : '' %>"> <i class="bi bi-patch-question d-block"></i><small>Question</small> </a>
-    <a href="/report" class="<%= (title === 'Sentiment Trends') ? 'fw-bold' : '' %>"> <i class="bi bi-patch-question d-block"></i><small>Sentiment Trends</small></a>
+    <a href="/form-mhs" class="<%= (title === 'List Form Mahasiswa') ? 'fw-bold' : '' %>"> <i class="bi bi-input-cursor-text d-block"></i><small>Kuesinoner</small> </a>
+    <a href="/forms" class="<%= (title === 'List Forms') ? 'fw-bold' : '' %>"> <i class="bi bi-patch-question d-block"></i><small>Forms</small> </a>
   </div>
 </nav>
