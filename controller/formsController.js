@@ -24,13 +24,13 @@ export const addForms = (req, res) => {
 
 export const addFormsQuestions = async (req, res) => {
   try {
-    const { title, description, questions, categories, types } = req.body;
+    const { title, description, questions, category, types } = req.body;
 
     if (!Array.isArray(questions) || !title) {
       return res.status(400).json({ message: "Data tidak lengkap" });
     }
 
-    await formsModel.addFormsWithQuestions(title, description, questions, categories, types);
+    await formsModel.addFormsWithQuestions(title, description, questions, category, types);
 
     res.status(200).json({ message: "Berhasil" });
   } catch (error) {

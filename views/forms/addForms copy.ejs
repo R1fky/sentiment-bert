@@ -16,26 +16,22 @@
         <textarea name="description" class="form-control rounded-3" rows="3" placeholder="Deskripsi singkat tentang formulir..."></textarea>
       </div>
 
-      <!-- Kategori Formulir -->
-      <div class="mb-4">
-        <label class="form-label fw-semibold">Kategori Formulir</label>
-        <select name="category" class="form-select rounded-3" required>
-          <option value="">Pilih kategori formulir</option>
-          <option value="Akademik">Akademik</option>
-          <option value="Fasilitas">Fasilitas</option>
-          <option value="Pelayanan Dosen">Pelayanan Dosen</option>
-          <option value="Administrasi">Administrasi</option>
-          <option value="Lainnya">Lainnya</option>
-        </select>
-      </div>
-
-      <!-- Daftar Pertanyaan -->
       <div id="questions-container">
         <div class="card p-3 shadow-sm mb-3 question-item">
           <div class="d-flex justify-content-between align-items-center mb-2">
             <h6 class="mb-0 fw-semibold">Pertanyaan #1</h6>
           </div>
           <input type="text" name="questions[]" class="form-control mb-2" placeholder="Tulis pertanyaan..." required />
+
+          <!-- Dropdown kategori -->
+          <select name="categories[]" class="form-select mb-2">
+            <option value="">Pilih kategori pertanyaan</option>
+            <option value="Akademik">Akademik</option>
+            <option value="Fasilitas">Fasilitas</option>
+            <option value="Pelayanan Dosen">Pelayanan Dosen</option>
+            <option value="Administrasi">Administrasi</option>
+            <option value="Lainnya">Lainnya</option>
+          </select>
 
           <!-- Tipe pertanyaan -->
           <select name="types[]" class="form-select">
@@ -56,8 +52,7 @@
   </div>
 </div>
 
-<!-- Tambahkan script SweetAlert dan form handler -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<!-- JS untuk Tambah Pertanyaan & Submit -->
 <script>
   let questionCount = 1;
 
@@ -74,12 +69,21 @@
           <i class="bi bi-trash"></i>
         </button>
       </div>
-      <input type="text" name="questions[]" class="form-control mb-2" placeholder="Tulis pertanyaan..." required />
+      <input type="text" name="questions[]" class="form-control mb-2" placeholder="Tulis pertanyaan..." required>
+      <select name="categories[]" class="form-select mb-2">
+        <option value="">Pilih kategori pertanyaan</option>
+        <option value="Akademik">Akademik</option>
+        <option value="Fasilitas">Fasilitas</option>
+        <option value="Pelayanan Dosen">Pelayanan Dosen</option>
+        <option value="Administrasi">Administrasi</option>
+        <option value="Lainnya">Lainnya</option>
+      </select>
       <select name="types[]" class="form-select">
         <option value="radio">Radio</option>
         <option value="text">Text</option>
       </select>
     `;
+
     container.appendChild(div);
 
     div.querySelector(".btn-remove-question").addEventListener("click", () => {
@@ -98,7 +102,7 @@
     const data = {
       title: formData.get("title"),
       description: formData.get("description"),
-      category: formData.get("category"),
+      category: formData.get("category"), // 🆕 ambil kategori
       questions: formData.getAll("questions[]"),
       types: formData.getAll("types[]"),
     };
@@ -106,7 +110,7 @@
     try {
       const response = await fetch("/forms/add", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${window.token}` },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(data),
       });
 

@@ -11,17 +11,17 @@ export const listForms = async () => {
   }
 };
 
-export const addFormsWithQuestions = async (title, description, questions, categories, types) => {
+export const addFormsWithQuestions = async (title, description, questions, category, types) => {
   try {
     const newForm = await prisma.form.create({
       data: {
         title,
         description,
+        category,
         questions: {
-          create: questions.map((q, i) => ({
+          create: questions.map((q, idx) => ({
             question_text: q,
-            question_category: categories[i] || "",
-            question_type: types[i] || "radio",
+            question_type: types[idx] || "radio",
           })),
         },
       },
@@ -38,13 +38,13 @@ export const getFormDetailId = async (formId) => {
   try {
     return await prisma.form.findUnique({
       where: { id: formId },
-      include : {
-        questions : {
-          include : {
-            answer : true
-          }
-        }
-      }
+      include: {
+        questions: {
+          include: {
+            answer: true,
+          },
+        },
+      },
     });
   } catch (error) {
     console.error("Data failed No Result");

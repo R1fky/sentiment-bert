@@ -6,23 +6,33 @@ dayjs.extend(relativeTime);
 
 export const getDashboard = async () => {
   try {
-    const data = await prisma.answer.findMany({
+    const forms = await prisma.form.findMany({
       include: {
-        question: true,
+        questions: {
+          include: {
+            answer: true,
+          },
+        },
       },
     });
 
-    // Kelompokkan berdasarkan kategori pertanyaan
     const kategoriMap = {};
 
-    data.forEach((item) => {
-      const kategori = item.question.question_category || "Tidak Diketahui";
+    forms.forEach((form) => {
+      const kategori = form.category || "Tidak Diketahui";
+
       if (!kategoriMap[kategori]) {
         kategoriMap[kategori] = { positif: 0, netral: 0, negatif: 0, total: 0 };
       }
 
-      kategoriMap[kategori][item.sentiment] += 1;
-      kategoriMap[kategori].total += 1;
+      form.questions.forEach((q) => {
+        q.answer.forEach((a) => {
+          if (a.sentiment && kategoriMap[kategori][a.sentiment] !== undefined) {
+            kategoriMap[kategori][a.sentiment]++;
+            kategoriMap[kategori].total++;
+          }
+        });
+      });
     });
 
     const labels = Object.keys(kategoriMap);
@@ -31,11 +41,43 @@ export const getDashboard = async () => {
     const negatifData = [];
 
     labels.forEach((kategori) => {
-      const total = kategoriMap[kategori].total || 1; // Hindari pembagi nol
+      const total = kategoriMap[kategori].total || 1;
       positifData.push(((kategoriMap[kategori].positif / total) * 100).toFixed(2));
       netralData.push(((kategoriMap[kategori].netral / total) * 100).toFixed(2));
       negatifData.push(((kategoriMap[kategori].negatif / total) * 100).toFixed(2));
     });
+
+    const allAnswers = forms.flatMap((form) => form.questions.flatMap((q) => q.answer.map((a) => ({ ...a, question: q }))));
+    // const data = await prisma.answer.findMany({
+    //   include: {
+    //     question: true,
+    //   },
+    // });
+
+    // // Kelompokkan berdasarkan kategori pertanyaan
+    // const kategoriMap = {};
+
+    // data.forEach((item) => {
+    //   const kategori = item.question.question_category || "Tidak Diketahui";
+    //   if (!kategoriMap[kategori]) {
+    //     kategoriMap[kategori] = { positif: 0, netral: 0, negatif: 0, total: 0 };
+    //   }
+
+    //   kategoriMap[kategori][item.sentiment] += 1;
+    //   kategoriMap[kategori].total += 1;
+    // });
+
+    // const labels = Object.keys(kategoriMap);
+    // const positifData = [];
+    // const netralData = [];
+    // const negatifData = [];
+
+    // labels.forEach((kategori) => {
+    //   const total = kategoriMap[kategori].total || 1; // Hindari pembagi nol
+    //   positifData.push(((kategoriMap[kategori].positif / total) * 100).toFixed(2));
+    //   netralData.push(((kategoriMap[kategori].netral / total) * 100).toFixed(2));
+    //   negatifData.push(((kategoriMap[kategori].negatif / total) * 100).toFixed(2));
+    // });
 
     //activity terbaru
     const latestQuestions = await prisma.question.findMany({
@@ -64,7 +106,7 @@ export const getDashboard = async () => {
     const activity = [...formattedLatestQuestions, ...formattedLatestAnswers].sort((a, b) => b.createdAt - a.createdAt).slice(0, 5);
 
     return {
-      all: data, // ← tambahkan ini
+      all: allAnswers,
       labels,
       positifData,
       netralData,
@@ -77,28 +119,34 @@ export const getDashboard = async () => {
   }
 };
 
-
 //category status
 export const getCategoryStatus = async () => {
-  const categories = await prisma.question.findMany({
-    select: { question_category: true },
-    distinct: ["question_category"],
+  const categories = await prisma.form.findMany({
+    select: { category: true },
+    distinct: ["category"],
   });
 
   const statusData = await Promise.all(
-    categories.map(async ({ question_category }) => {
-      const total = await prisma.answer.count({
-        where: {
-          question: { question_category },
+    categories.map(async ({ category }) => {
+      const forms = await prisma.form.findMany({
+        where: { category },
+        include: {
+          questions: {
+            include: { answer: true },
+          },
         },
       });
+
+      const total = forms.reduce((sum, form) => {
+        return sum + form.questions.reduce((s, q) => s + q.answer.length, 0);
+      }, 0);
 
       let status = "Tertunda";
       if (total >= 30) status = "Selesai";
       else if (total >= 10) status = "Diproses";
 
       return {
-        kategori: question_category,
+        kategori: category,
         responden: total,
         status,
       };

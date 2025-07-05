@@ -2,14 +2,6 @@ import * as dashboardModel from "../models/dashboardModel.js";
 
 export const showDashboard = async (req, res) => {
   try {
-    const user = req.user;
-    if (!user || user.role !== "ADMIN") {
-      return res.status(403).render("errors/404", {
-        title: "Akses Ditolak",
-        layout: "layouts/main",
-      });
-    }
-
     const data = await dashboardModel.getDashboard();
     const categoryStatus = await dashboardModel.getCategoryStatus();
 

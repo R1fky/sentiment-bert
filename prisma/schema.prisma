@@ -11,18 +11,18 @@ model form {
   id          Int        @id @default(autoincrement())
   title       String
   description String?
+  category    String
   created_at  DateTime   @default(now())
   questions   question[]
 }
 
 model question {
-  id                Int      @id @default(autoincrement())
-  formId            Int
-  question_text     String
-  question_category String
-  question_type     String   @default("radio")
-  created_at        DateTime @default(now())
-  answer            answer[]
+  id            Int      @id @default(autoincrement())
+  formId        Int
+  question_text String
+  question_type String   @default("radio")
+  created_at    DateTime @default(now())
+  answer        answer[]
 
   form form @relation(fields: [formId], references: [id], onDelete: Cascade)
 
