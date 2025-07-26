@@ -47,21 +47,19 @@ export const addFormsQuestions = async (req, res) => {
 export const getFormDetail = async (req, res) => {
   try {
     const formId = parseInt(req.params.id);
+    let { start, end } = req.query;
 
-    const form = await formsModel.getFormDetailId(formId);
+    start = start?.trim() || null;
+    end = end?.trim() || null;
+
+    const form = await formsModel.getFormDetailId(formId, { start, end });
 
     if (!form) {
-      res.status(400).json({
-        message: "Formulir tidak ditemukan",
-      });
+      return res.status(404).json({ message: "Formulir tidak ditemukan" });
     }
 
     const pertanyaanRekapSentiment = form.questions.map((q) => {
-      const counts = {
-        positif: 0,
-        netral: 0,
-        negatif: 0,
-      };
+      const counts = { positif: 0, netral: 0, negatif: 0 };
 
       q.answer.forEach((ans) => {
         if (ans.sentiment && counts.hasOwnProperty(ans.sentiment)) {
@@ -84,9 +82,11 @@ export const getFormDetail = async (req, res) => {
       layout: "layouts/main",
       form,
       pertanyaanRekapSentiment,
+      start,
+      end,
     });
   } catch (error) {
-    console.error("Gagal menampilkan detail : ", error);
+    console.error("Gagal menampilkan detail:", error);
     res.status(500).json({ message: "Gagal Menampilkan detail" });
   }
 };
@@ -109,7 +109,6 @@ export const deleteForms = async (req, res) => {
 export const importQuestions = async (req, res) => {
   const formId = parseInt(req.body.formId);
   const results = [];
-
   if (!req.file) {
     return res.status(400).json({ message: "File CSV tidak ditemukan." });
   }
@@ -145,37 +144,45 @@ export const importQuestions = async (req, res) => {
 // eksport
 export const exportToPDF = async (req, res) => {
   const formId = parseInt(req.params.formId);
+  const { start, end } = req.query; // ambil filter
 
   try {
-    const form = await formsModel.getFormDetailId(formId);
+    const form = await formsModel.getFormDetailId(formId, { start, end }); // kirim filter
     if (!form) {
       return res.status(404).json({ message: "Form tidak ditemukan" });
     }
 
     const doc = new PDFDocument({ margin: 50, size: "A4" });
 
-    // Response header
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", `attachment; filename=laporan_form_${formId}.pdf`);
 
-    // Pipe stream
     doc.pipe(res);
 
-    // Judul Formulir
     doc.fontSize(16).text(`Laporan Sentimen - ${form.title}`, { align: "center" }).moveDown(1);
     doc
       .fontSize(12)
       .text(`Deskripsi: ${form.description || "Tidak ada deskripsi"}`)
       .moveDown(1);
 
-    // Tabel Ringkasan
+    if (start || end) {
+      doc
+        .fontSize(10)
+        .fillColor("gray")
+        .text(`Filter: ${start || "awal"} - ${end || "akhir"}`)
+        .moveDown(1);
+    }
+
     form.questions.forEach((q, index) => {
       const total = q.answer.length;
       const positif = q.answer.filter((a) => a.sentiment === "positif").length;
       const netral = q.answer.filter((a) => a.sentiment === "netral").length;
       const negatif = q.answer.filter((a) => a.sentiment === "negatif").length;
 
-      doc.font("Helvetica-Bold").text(`${index + 1}. ${q.question_text}`);
+      doc
+        .font("Helvetica-Bold")
+        .fillColor("black")
+        .text(`${index + 1}. ${q.question_text}`);
       doc.font("Helvetica").text(`Total Jawaban: ${total}`);
       doc.text(`• Positif: ${positif}`);
       doc.text(`• Netral : ${netral}`);
@@ -190,18 +197,18 @@ export const exportToPDF = async (req, res) => {
   }
 };
 
-// eskport execel 
+// eskport execel
 export const exportToExcel = async (req, res) => {
   const formId = parseInt(req.params.formId);
+  const { start, end } = req.query;
 
   try {
-    const form = await formsModel.getFormDetailId(formId);
+    const form = await formsModel.getFormDetailId(formId, { start, end }); // kirim filter
     if (!form) return res.status(404).json({ message: "Formulir tidak ditemukan." });
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet(`Laporan Form ${formId}`);
 
-    // Header
     worksheet.columns = [
       { header: "No", key: "no", width: 5 },
       { header: "Pertanyaan", key: "question_text", width: 50 },
@@ -212,7 +219,13 @@ export const exportToExcel = async (req, res) => {
       { header: "Negatif", key: "negatif", width: 10 },
     ];
 
-    // Data
+    // optional: tambahkan row filter di atas
+    if (start || end) {
+      worksheet.addRow([]);
+      worksheet.addRow([`Filter Tanggal: ${start || "awal"} - ${end || "akhir"}`]);
+      worksheet.addRow([]);
+    }
+
     form.questions.forEach((q, index) => {
       const total = q.answer.length;
       const positif = q.answer.filter((a) => a.sentiment === "positif").length;
@@ -230,10 +243,8 @@ export const exportToExcel = async (req, res) => {
       });
     });
 
-    // Format header
     worksheet.getRow(1).font = { bold: true };
 
-    // Set response
     res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     res.setHeader("Content-Disposition", `attachment; filename=laporan_form_${formId}.xlsx`);
 
@@ -243,4 +254,4 @@ export const exportToExcel = async (req, res) => {
     console.error("Gagal ekspor Excel:", error);
     res.status(500).json({ message: "Gagal mengekspor Excel" });
   }
-};  
+};

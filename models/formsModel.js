@@ -34,22 +34,55 @@ export const addFormsWithQuestions = async (title, description, questions, categ
   }
 };
 
-export const getFormDetailId = async (formId) => {
-  try {
-    return await prisma.form.findUnique({
-      where: { id: formId },
-      include: {
-        questions: {
-          include: {
-            answer: true,
+// export const getFormDetailId = async (formId) => {
+//   try {
+//     return await prisma.form.findUnique({
+//       where: { id: formId },
+//       include: {
+//         questions: {
+//           include: {
+//             answer: true,
+//           },
+//         },
+//       },
+//     });
+//   } catch (error) {
+//     console.error("Data failed No Result");
+//     throw error;
+//   }
+// };
+
+export const getFormDetailId = async (formId, filter = {}) => {
+  let { start, end } = filter;
+
+  const whereClause = {};
+
+  if (start && !isNaN(new Date(start))) {
+    whereClause.gte = new Date(start);
+  }
+
+  if (end && !isNaN(new Date(end))) {
+    whereClause.lte = new Date(end + "T23:59:59");
+  }
+
+  console.log("👉 Filter created_at:", whereClause);
+
+  return await prisma.form.findUnique({
+    where: { id: formId },
+    include: {
+      questions: {
+        include: {
+          answer: {
+            where: {
+              ...(Object.keys(whereClause).length > 0 && {
+                created_at: whereClause,
+              }),
+            },
           },
         },
       },
-    });
-  } catch (error) {
-    console.error("Data failed No Result");
-    throw error;
-  }
+    },
+  });
 };
 
 //delete form
@@ -64,7 +97,7 @@ export const deleteForm = async (formId) => {
   }
 };
 
-//import 
+//import
 export const importQuestionsToDB = async (questions) => {
   try {
     return await prisma.question.createMany({
