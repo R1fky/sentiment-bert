@@ -6,6 +6,36 @@
     <h2 class="text-primary fw-bold">Dashboard</h2>
   </div>
 
+  <!-- Filter Tanggal -->
+  <div class="card shadow-sm border-0 rounded-4 mb-4">
+    <div class="card-body">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h6 class="fw-semibold text-secondary mb-0"><i class="bi bi-calendar-range me-2"></i> Filter Rentang Tanggal</h6>
+      </div>
+
+      <form method="GET" class="row g-3 align-items-end">
+        <div class="col-md-4">
+          <label for="start" class="form-label small text-muted">Tanggal Mulai</label>
+          <input type="date" name="start" id="start" class="form-control" value="<%= start || '' %>" />
+        </div>
+        <div class="col-md-4">
+          <label for="end" class="form-label small text-muted">Tanggal Akhir</label>
+          <input type="date" name="end" id="end" class="form-control" value="<%= end || '' %>" />
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <button class="btn btn-outline-primary w-100"><i class="bi bi-funnel-fill me-1"></i> Terapkan Filter</button>
+        </div>
+      </form>
+
+      <% if (start || end) { %>
+      <div class="alert alert-info mt-4 py-2 px-3 small mb-0 rounded-3">
+        <i class="bi bi-filter-circle me-1"></i>
+        Menampilkan data dari <strong><%= start || 'awal' %></strong> hingga <strong><%= end || 'akhir' %></strong>
+      </div>
+      <% } %>
+    </div>
+  </div>
+
   <!-- Summary Cards -->
   <div class="row g-4 mb-4">
     <% const cards = [ { label: 'Positif', color: '#198754', value: summary.positif, icon: 'bi-emoji-smile' }, { label: 'Netral', color: '#6c757d', value: summary.netral, icon: 'bi-emoji-neutral' }, { label: 'Negatif', color: '#dc3545',

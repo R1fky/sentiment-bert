@@ -4,13 +4,18 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime.js";
 dayjs.extend(relativeTime);
 
-export const getDashboard = async () => {
+export const getDashboard = async ({ start, end } = {}) => {
   try {
     const forms = await prisma.form.findMany({
       include: {
         questions: {
           include: {
-            answer: true,
+            answer: {
+              where: {
+                ...(start && { created_at: { gte: new Date(start) } }),
+                ...(end && { created_at: { lte: new Date(end + "T23:59:59") } }),
+              },
+            },
           },
         },
       },
@@ -48,7 +53,7 @@ export const getDashboard = async () => {
     });
 
     const allAnswers = forms.flatMap((form) => form.questions.flatMap((q) => q.answer.map((a) => ({ ...a, question: q }))));
-    
+
     //activity terbaru
     const latestQuestions = await prisma.question.findMany({
       orderBy: { created_at: "desc" },
