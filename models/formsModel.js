@@ -51,3 +51,27 @@ export const getFormDetailId = async (formId) => {
     throw error;
   }
 };
+
+//delete form
+export const deleteForm = async (formId) => {
+  try {
+    return await prisma.form.delete({
+      where: { id: formId },
+    });
+  } catch (error) {
+    console.error("Data tidak Berhasil di Hapus");
+    throw error;
+  }
+};
+
+//import 
+export const importQuestionsToDB = async (questions) => {
+  try {
+    return await prisma.question.createMany({
+      data: questions,
+    });
+  } catch (error) {
+    console.error("Gagal menyimpan pertanyaan:", error);
+    throw error;
+  }
+};

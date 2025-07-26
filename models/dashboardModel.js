@@ -48,37 +48,7 @@ export const getDashboard = async () => {
     });
 
     const allAnswers = forms.flatMap((form) => form.questions.flatMap((q) => q.answer.map((a) => ({ ...a, question: q }))));
-    // const data = await prisma.answer.findMany({
-    //   include: {
-    //     question: true,
-    //   },
-    // });
-
-    // // Kelompokkan berdasarkan kategori pertanyaan
-    // const kategoriMap = {};
-
-    // data.forEach((item) => {
-    //   const kategori = item.question.question_category || "Tidak Diketahui";
-    //   if (!kategoriMap[kategori]) {
-    //     kategoriMap[kategori] = { positif: 0, netral: 0, negatif: 0, total: 0 };
-    //   }
-
-    //   kategoriMap[kategori][item.sentiment] += 1;
-    //   kategoriMap[kategori].total += 1;
-    // });
-
-    // const labels = Object.keys(kategoriMap);
-    // const positifData = [];
-    // const netralData = [];
-    // const negatifData = [];
-
-    // labels.forEach((kategori) => {
-    //   const total = kategoriMap[kategori].total || 1; // Hindari pembagi nol
-    //   positifData.push(((kategoriMap[kategori].positif / total) * 100).toFixed(2));
-    //   netralData.push(((kategoriMap[kategori].netral / total) * 100).toFixed(2));
-    //   negatifData.push(((kategoriMap[kategori].negatif / total) * 100).toFixed(2));
-    // });
-
+    
     //activity terbaru
     const latestQuestions = await prisma.question.findMany({
       orderBy: { created_at: "desc" },

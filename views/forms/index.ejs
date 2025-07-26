@@ -19,7 +19,6 @@
             <li><a class="dropdown-item" href="?sort=oldest">Terlama</a></li>
           </ul>
         </div>
-
         <!-- Tambah -->
         <a href="/forms/add" class="btn btn-purple rounded-pill shadow-sm"> <i class="bi bi-file-earmark-plus me-1"></i> Formulir Baru </a>
       </div>
@@ -48,8 +47,10 @@
                 <li>
                   <a href="/forms/detail/<%= form.id %>" class="dropdown-item"> <i class="bi bi-box-arrow-in-right me-2"></i> Buka Formulir </a>
                 </li>
+                <!-- modal  -->
+                <button type="button" class="dropdown-item text-success btn-import" data-id="<%= form.id %>" data-bs-toggle="modal" data-bs-target="#importModal"><i class="bi bi-upload me-2"></i>Import Pertanyaan</button>
                 <li>
-                  <button class="dropdown-item text-danger btn-delete-form" data-id="<%= form.id %>"><i class="bi bi-trash me-2"></i> Hapus</button>
+                  <button class="dropdown-item text-danger btn-delete-form" data-id="<%= form.id %>" onclick="confirmDelete(this)"><i class="bi bi-trash me-2"></i>Hapus</button>
                 </li>
               </ul>
             </div>
@@ -60,4 +61,134 @@
     <% }) %>
   </div>
   <% } %>
+  <!-- modal -->
+  <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="importForm" enctype="multipart/form-data" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="importModalLabel">Import Pertanyaan dari CSV</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="formId" value="" />
+          <div class="mb-3">
+            <label for="csvFile" class="form-label">Pilih File CSV</label>
+            <input type="file" name="csvFile" id="csvFile" accept=".csv" class="form-control" required />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-primary">Import Sekarang</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- end modal  -->
 </div>
+<script>
+  function confirmDelete(button) {
+    const formId = button.getAttribute("data-id");
+
+    Swal.fire({
+      title: "Yakin ingin menghapus?",
+      text: "Formulir dan semua datanya akan terhapus permanen!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Kirim permintaan DELETE pakai fetch
+        fetch(`/forms/delete/${formId}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Gagal menghapus");
+            }
+            return response.json();
+          })
+          .then((data) => {
+            Swal.fire({
+              icon: "success",
+              title: "Berhasil!",
+              text: "Formulir telah dihapus.",
+              timer: 2000,
+              showConfirmButton: false,
+            });
+
+            // Reload halaman setelah delay
+            setTimeout(() => {
+              location.reload();
+            }, 2000);
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Gagal!",
+              text: "Terjadi kesalahan saat menghapus.",
+            });
+          });
+      }
+    });
+  }
+
+  // Saat tombol "Import" diklik, isi hidden input formId
+  document.querySelectorAll(".btn-import").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const formId = btn.getAttribute("data-id");
+      document.querySelector("#importForm input[name='formId']").value = formId;
+    });
+  });
+
+  document.getElementById("importForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formElement = e.target;
+    const formData = new FormData(formElement);
+
+    const formId = formData.get("formId");
+
+    if (!formId) {
+      Swal.fire("Gagal", "Formulir belum dipilih.", "error");
+      return;
+    }
+
+    try {
+      const response = await fetch("/forms/import", {
+        method: "POST",
+        body: formData,
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: result.message || "Pertanyaan berhasil diimport!",
+        }).then(() => {
+          location.reload(); // reload halaman untuk memperbarui daftar pertanyaan
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Gagal!",
+          text: result.message || "Terjadi kesalahan saat mengimport.",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Terjadi kesalahan jaringan atau server.",
+      });
+    }
+  });
+</script>

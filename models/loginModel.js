@@ -44,7 +44,7 @@ export const loginUser = async (username, password) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       throw new Error("Invalid password");
-    }
+    } 
 
     // 3. Return data user tanpa password
     return {
