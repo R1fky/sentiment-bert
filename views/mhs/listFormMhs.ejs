@@ -1,31 +1,80 @@
-<link rel="stylesheet" href="/css/formMhs/listFormMhs.css">
-<div class="container py-5">
-  <!-- Header -->
-  <div class="bg-soft-purple p-4 rounded-4 shadow-sm text-center mb-4 border border-purple-subtle">
-    <h3 class="fw-bold text-purple m-0"><i class="bi bi-ui-checks me-2"></i> Formulir Kuesioner Tersedia</h3>
-  </div>
+<link rel="stylesheet" href="/css/formMhs/listFormMhs.css" />
 
-  <!-- Konten -->
-  <% if (formList.length === 0) { %>
-  <div class="alert alert-warning text-center shadow-sm rounded-3">Belum ada formulir tersedia.</div>
-  <% } else { const thumbnails = [ "/image/formMhs/thumb1.png", "/image/formMhs/thumb2.png", "/image/formMhs/thumb3.png" ]; %>
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-    <% formList.forEach((form, index) => { const imgSrc = thumbnails[index % thumbnails.length]; %>
-    <div class="col">
-      <div class="card h-100 border-0 rounded-4 transition-hover highlight-yellow">
-        <img src="<%= imgSrc %>" class="card-img-top rounded-top-4" alt="Formulir Gambar" style="height: 180px; object-fit: cover" />
-        <div class="card-body d-flex flex-column justify-content-between">
-          <div>
-            <h5 class="fw-bold text-purple"><%= form.title %></h5>
-            <p class="text-muted small mb-3"><%= form.description || 'Tanpa deskripsi.' %></p>
+<!-- Pastikan Tailwind CSS sudah diinclude di layout utama -->
+<div class="bg-gradient-to-br from-purple-50 via-white to-indigo-50 min-h-screen">
+  <div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Header dengan Gradient -->
+    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 rounded-2xl p-8 shadow-xl text-center mb-8 animate-fade-in">
+      <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
+        <i class="bi bi-ui-checks text-3xl text-white"></i>
+      </div>
+      <h1 class="text-3xl font-bold text-white mb-2">Formulir Kuesioner Tersedia</h1>
+      <p class="text-purple-100 text-lg">Pilih kuesioner yang ingin Anda isi</p>
+    </div>
+
+    <!-- Content Area -->
+    <% if (formList.length === 0) { %>
+    <!-- Empty State -->
+    <div class="text-center py-16 animate-fade-in">
+      <div class="inline-flex items-center justify-center w-24 h-24 bg-purple-100 rounded-full mb-6">
+        <i class="bi bi-inbox text-4xl text-purple-500"></i>
+      </div>
+      <h3 class="text-2xl font-bold text-gray-800 mb-3">Belum Ada Formulir Tersedia</h3>
+      <p class="text-gray-600 max-w-md mx-auto">Saat ini belum ada kuesioner yang dapat diisi. Silakan periksa kembali nanti.</p>
+    </div>
+    <% } else { %>
+    <!-- Grid Layout untuk Forms -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% const thumbnails = [ "/image/formMhs/thumb1.png", "/image/formMhs/thumb2.png", "/image/formMhs/thumb3.png" ]; const categories = ['Akademik', 'Fasilitas', 'Pelayanan']; const categoryColors = ['purple', 'green', 'blue']; %> <%
+      formList.forEach((form, index) => { const imgSrc = thumbnails[index % thumbnails.length]; const category = categories[index % categories.length]; const color = categoryColors[index % categoryColors.length]; %>
+      <div
+        class="group bg-white/90 backdrop-blur-sm border border-white/20 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transform hover:-translate-y-2 hover:scale-105 transition-all duration-300 animate-slide-up"
+        style="animation-delay: <%= index * 0.1 %>s"
+      >
+        <!-- Image Section -->
+        <div class="relative overflow-hidden">
+          <img src="<%= imgSrc %>" class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110" alt="<%= form.title %>" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+        </div>
+
+        <!-- Content Section -->
+        <div class="p-6">
+          <!-- Category Badge -->
+          <div class="flex items-center mb-3">
+            <div class="w-2 h-2 bg-<%= color %>-500 rounded-full mr-2"></div>
+            <span class="text-xs font-semibold text-<%= color %>-600 uppercase tracking-wide"><%= category %></span>
           </div>
-          <div class="text-end">
-            <a href="/form-mhs/<%= form.id %>/isi" class="btn btn-purple btn-sm rounded-pill shadow-sm"> <i class="bi bi-pencil-square me-1"></i> Isi Kuesoner </a>
+
+          <!-- Title -->
+          <h3 class="text-xl font-bold text-gray-800 mb-3 group-hover:text-purple-600 transition-colors"><%= form.title %></h3>
+
+          <!-- Description -->
+          <p class="text-gray-600 text-sm mb-6 leading-relaxed"><%= form.description || 'Silakan isi kuesioner ini untuk memberikan masukan yang berharga.' %></p>
+
+          <!-- Footer -->
+          <% const now = new Date(); const createdAt = new Date(form.created_at); const isNew = (now - createdAt) / (1000 * 60 * 60 * 24) <= 7; const formattedDate = createdAt.toLocaleString('id-ID', { weekday: 'long', day: 'numeric',
+          month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }); %>
+
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col text-xs text-gray-500 space-y-1">
+              <% if (isNew) { %>
+              <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium text-[10px] animate-pulse"> Baru Ditambahkan </span>
+              <% } %>
+              <span>Ditambahkan pada: <%= formattedDate %></span>
+            </div>
+
+            <a
+              href="/form-mhs/<%= form.id %>/isi"
+              class="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2.5 rounded-full font-semibold inline-flex items-center transform hover:-translate-y-1 hover:shadow-lg transition-all duration-300 group"
+            >
+              <i class="bi bi-pencil-square mr-2"></i>
+              Isi Kuesioner
+            </a>
           </div>
         </div>
       </div>
+      <% }); %>
     </div>
-    <% }) %>
+    <% } %>
   </div>
-  <% } %>
 </div>
